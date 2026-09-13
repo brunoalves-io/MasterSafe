@@ -1,4 +1,4 @@
-/* MasterSafe V6 Zero Custo — conta, privacidade e limites defensivos do beta. */
+/* MasterSafe V7.3.2 - conta, privacidade, histórico e limites defensivos do beta. */
 (() => {
   'use strict';
 
@@ -13,6 +13,13 @@
     'vault.master_password_changed': ['◆', 'Senha-mestra alterada'],
     'data.encrypted_backup_exported': ['⇩', 'Backup criptografado exportado'],
     'data.portable_exported': ['⇩', 'Dados legíveis exportados']
+  };
+  const DETAIL_LABELS = {
+    skipped: 'Ignorados',
+    uploaded: 'Enviados',
+    downloaded: 'Baixados',
+    deleted: 'Excluídos',
+    conflicts: 'Conflitos'
   };
 
   const $ = id => document.getElementById(id);
@@ -53,13 +60,13 @@
       root.innerHTML = events.map(event => {
         const meta = EVENT_LABELS[event.event_type] || ['•', event.event_type];
         const detail = event.details && Object.keys(event.details).length
-          ? Object.entries(event.details).map(([k,v]) => `${esc(k)}: ${esc(v)}`).join(' · ')
+          ? Object.entries(event.details).map(([k,v]) => `${esc(DETAIL_LABELS[k] || k)}: ${esc(v)}`).join(' · ')
           : 'Sem dados sensíveis registrados';
-        return `<div class="security-event"><div class="security-event-icon">${esc(meta[0])}</div><div><strong>${esc(meta[1])}</strong><small>${detail}</small></div><small>${esc(formatDateTime(event.created_at))}</small></div>`;
+        return `<div class="security-event"><div class="security-event-icon">${esc(meta[0])}</div><div class="security-event-copy"><strong>${esc(meta[1])}</strong><small>${detail}</small></div><small>${esc(formatDateTime(event.created_at))}</small></div>`;
       }).join('');
     } catch (error) {
       console.warn('Histórico de segurança', error);
-      root.innerHTML = '<div class="empty-state"><strong>Não foi possível carregar</strong>Confira se o schema V6 Zero Custo foi aplicado no Supabase.</div>';
+      root.innerHTML = '<div class="empty-state"><strong>Não foi possível carregar</strong>Confira se o schema do MasterSafe foi aplicado no Supabase.</div>';
     }
   }
 
@@ -185,7 +192,7 @@
   wire();
 })();
 
-/* MasterSafe V7.3: carrega módulos opcionais sem alterar o núcleo do cofre. */
+/* MasterSafe V7.3.2: carrega módulos opcionais sem alterar o núcleo do cofre. */
 (() => {
   const load = (src, marker) => {
     if (document.querySelector(`script[${marker}]`)) return;
