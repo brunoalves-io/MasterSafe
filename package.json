@@ -1,0 +1,17 @@
+{
+  "name": "mastersafe-native",
+  "private": true,
+  "version": "7.1.0",
+  "description": "MasterSafe Desktop e Android com build automático no GitHub Actions",
+  "scripts": {
+    "tauri": "tauri",
+    "desktop:dev": "tauri dev",
+    "desktop:build": "tauri build --bundles nsis",
+    "android:init": "tauri android init",
+    "android:dev": "tauri android dev",
+    "android:build": "tauri android build -- --debug --apk"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}

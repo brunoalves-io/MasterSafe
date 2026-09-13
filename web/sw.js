@@ -1,0 +1,31 @@
+const CACHE = 'mastersafe-v6-1-public-1';
+const FILES = [
+  './','./index.html','./share.html','./styles.css','./app.js','./smart.js','./cloud-config.js','./cloud.js','./beta.js','./privacidade.html','./termos.html','./manifest.json','./assets/icon.svg'
+];
+self.addEventListener('install', event => event.waitUntil((async()=>{
+  await caches.open(CACHE).then(cache => cache.addAll(FILES));
+  await self.skipWaiting();
+})()));
+self.addEventListener('activate', event => event.waitUntil((async()=>{
+  const keys=await caches.keys();
+  await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
+  await self.clients.claim();
+})()));
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
+  if (event.request.mode === 'navigate') {
+    event.respondWith(fetch(event.request).then(resp => {
+      const copy = resp.clone();
+      caches.open(CACHE).then(cache => cache.put(event.request, copy));
+      return resp;
+    }).catch(() => caches.match(event.request).then(r => r || caches.match('./index.html'))));
+    return;
+  }
+  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(resp => {
+    const copy = resp.clone();
+    caches.open(CACHE).then(cache => cache.put(event.request, copy));
+    return resp;
+  })));
+});

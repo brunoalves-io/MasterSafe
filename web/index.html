@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="application-name" content="MasterSafe" />
+  <meta name="description" content="MasterSafe — seus documentos importantes, organizados e protegidos." />
+  <title>MasterSafe</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <section id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <div class="brand-lock" aria-hidden="true">🔐</div>
+      <h1>MasterSafe</h1>
+      <p id="authSubtitle">Seus documentos importantes, protegidos e fáceis de encontrar.</p>
+
+      <div id="setupForm" class="auth-form hidden">
+        <label>
+          Seu nome
+          <input id="setupName" type="text" autocomplete="name" maxlength="80" placeholder="Como quer ser chamado" />
+        </label>
+        <label>
+          Seu e-mail
+          <input id="setupEmail" type="email" autocomplete="email" maxlength="120" placeholder="voce@exemplo.com" />
+        </label>
+        <label>
+          Crie sua senha-mestra
+          <input id="setupPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Mínimo de 8 caracteres" />
+        </label>
+        <label>
+          Confirme a senha
+          <input id="setupPasswordConfirm" type="password" autocomplete="new-password" minlength="8" placeholder="Repita a senha" />
+        </label>
+        <button id="setupButton" class="btn btn-primary btn-block">Criar meu cofre</button>
+        <button id="restoreCloudButton" class="btn btn-secondary btn-block" type="button">☁ Restaurar meu cofre da nuvem</button>
+        <p class="security-note">A senha-mestra protege a chave do cofre. Se você ativar a nuvem, os documentos continuam criptografados antes de sair deste dispositivo.</p>
+      </div>
+
+      <div id="unlockForm" class="auth-form hidden">
+        <label>
+          Senha-mestra
+          <input id="unlockPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" />
+        </label>
+        <button id="unlockButton" class="btn btn-primary btn-block">Desbloquear cofre</button>
+        <button id="cloudAccountButton" class="btn btn-secondary btn-block" type="button">☁ Conta e sincronização</button>
+        <p class="security-note">Seus arquivos são descriptografados apenas enquanto o cofre estiver aberto.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="appShell" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🔐</div>
+        <div>
+          <strong>MasterSafe</strong>
+          <span>Seu arquivo pessoal</span>
+        </div>
+      </div>
+
+      <nav class="nav-list" aria-label="Navegação principal">
+        <button class="nav-item active" data-view="home"><span>⌂</span> Início</button>
+        <button class="nav-item" data-view="documents"><span>▤</span> Documentos</button>
+        <button class="nav-item" data-view="radar"><span>◴</span> Radar</button>
+        <button class="nav-item" data-view="account"><span>◎</span> Conta</button>
+        <button class="nav-item" data-view="settings"><span>⚙</span> Configurações</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="profile-mini">
+          <div class="avatar" id="profileAvatar">U</div>
+          <div><strong id="profileName">Usuário</strong><span id="profileEmail">Conta local</span></div>
+        </div>
+        <div class="privacy-chip" id="cloudStatusChip">● Cofre desbloqueado · local</div>
+        <button id="lockButton" class="btn btn-ghost btn-block">Bloquear agora</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button id="mobileMenuButton" class="icon-btn mobile-only" aria-label="Abrir menu">☰</button>
+        <div class="search-wrap">
+          <span>⌕</span>
+          <input id="globalSearch" type="search" placeholder="Buscar documento, categoria, emissor..." />
+        </div>
+        <button id="addDocumentTop" class="btn btn-primary">＋ Adicionar documento</button>
+      </header>
+
+      <section id="view-home" class="view active">
+        <div class="hero-row">
+          <div>
+            <p class="eyebrow">PAINEL PESSOAL</p>
+            <h2>Está tudo no lugar.</h2>
+            <p class="muted">Seu cofre mostra o que você guardou e o que merece atenção.</p>
+          </div>
+          <button id="addDocumentHero" class="btn btn-primary btn-large">＋ Guardar documento</button>
+        </div>
+
+        <section class="assistant-panel">
+          <div class="assistant-icon">✦</div>
+          <div class="assistant-content">
+            <div><strong>Pergunte ao Cofre</strong><span>Busca inteligente pelos seus próprios documentos.</span></div>
+            <div class="assistant-search">
+              <input id="vaultQuestion" type="text" placeholder="Ex.: onde está a nota fiscal da TV?" />
+              <button id="askVaultButton" class="btn btn-dark" type="button">Perguntar</button>
+            </div>
+            <div id="vaultAnswer" class="assistant-answer hidden"></div>
+          </div>
+        </section>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span class="stat-icon">▤</span>
+            <div><small>Documentos</small><strong id="statDocuments">0</strong></div>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon">◴</span>
+            <div><small>Vencendo em 90 dias</small><strong id="statExpiring">0</strong></div>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon">✓</span>
+            <div><small>Sem vencimento</small><strong id="statNoExpiry">0</strong></div>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon">◉</span>
+            <div><small>Categorias usadas</small><strong id="statCategories">0</strong></div>
+          </article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div><h3>Documentos recentes</h3><p class="muted">Os últimos itens adicionados ao cofre.</p></div>
+              <button class="text-btn" data-view-jump="documents">Ver todos</button>
+            </div>
+            <div id="recentDocuments" class="document-list"></div>
+          </section>
+
+          <section class="panel radar-panel">
+            <div class="panel-head">
+              <div><h3>Radar</h3><p class="muted">Prazos que estão chegando.</p></div>
+              <button class="text-btn" data-view-jump="radar">Abrir radar</button>
+            </div>
+            <div id="radarPreview" class="radar-list"></div>
+          </section>
+        </div>
+
+        <section class="panel category-panel">
+          <div class="panel-head">
+            <div><h3>Categorias</h3><p class="muted">Entre no documento pelo assunto, não pela pasta.</p></div>
+          </div>
+          <div id="categoryGrid" class="category-grid"></div>
+        </section>
+      </section>
+
+      <section id="view-documents" class="view">
+        <div class="section-title-row">
+          <div><p class="eyebrow">ARQUIVO</p><h2>Seus documentos</h2><p class="muted">Pesquise, filtre e abra qualquer item do seu cofre.</p></div>
+          <button id="addDocumentDocuments" class="btn btn-primary">＋ Adicionar</button>
+        </div>
+
+        <div class="filter-bar">
+          <select id="categoryFilter">
+            <option value="">Todas as categorias</option>
+          </select>
+          <select id="expiryFilter">
+            <option value="">Qualquer validade</option>
+            <option value="expiring">Vence em até 90 dias</option>
+            <option value="expired">Vencido</option>
+            <option value="noexpiry">Sem vencimento</option>
+          </select>
+          <button id="clearFilters" class="btn btn-secondary">Limpar filtros</button>
+        </div>
+
+        <div id="documentsGrid" class="documents-grid"></div>
+      </section>
+
+      <section id="view-radar" class="view">
+        <div class="section-title-row">
+          <div><p class="eyebrow">PRAZOS</p><h2>Radar</h2><p class="muted">Tudo o que pode exigir sua atenção nos próximos meses.</p></div>
+          <button id="notificationButton" class="btn btn-secondary">Ativar notificações</button>
+        </div>
+        <div id="radarFull" class="timeline"></div>
+      </section>
+
+
+      <section id="view-account" class="view">
+        <div class="section-title-row">
+          <div><p class="eyebrow">CONTA & PRIVACIDADE</p><h2>Seu Cofre, sob seu controle</h2><p class="muted">Modo zero custo, portabilidade, histórico de segurança e direitos sobre seus dados.</p></div>
+          <span id="accountPlanBadge" class="badge badge-neutral">Plano local</span>
+        </div>
+
+        <div class="account-grid">
+          <article class="panel plan-current-card">
+            <div class="setting-title-line"><div><p class="eyebrow">PLANO ATUAL</p><h3 id="accountPlanName">Local</h3></div><span id="accountCloudBadge" class="badge badge-neutral">Sem conta</span></div>
+            <p id="accountPlanDescription" class="muted">Use o Cofre gratuitamente neste dispositivo. Conecte a nuvem para sincronizar e habilitar recursos de conta.</p>
+            <div class="usage-meter"><div class="usage-meter-head"><span>Arquivos do cofre</span><strong id="accountUsageText">Calculando...</strong></div><div class="usage-track"><div id="accountUsageBar" class="usage-bar"></div></div></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div><h3>Modo Zero Custo</h3><p class="muted">Esta versão foi desenhada para operar sem mensalidade de infraestrutura e sem APIs pagas durante o beta.</p></div>
+              <span id="zeroCostBadge" class="badge badge-safe">R$ 0/mês</span>
+            </div>
+            <div class="plans-grid zero-cost-grid">
+              <div class="plan-card active" data-plan="free">
+                <span class="plan-kicker">BETA GRATUITO</span><strong>Zero Custo</strong><b>R$ 0</b>
+                <small>Cofre local no dispositivo + sincronização opcional de até 25 MB na nuvem, com no máximo 5 MB por arquivo.</small>
+                <button id="freePlanButton" class="btn btn-secondary" type="button" disabled>Ativo</button>
+              </div>
+              <div class="plan-card">
+                <span class="plan-kicker">PROCESSAMENTO</span><strong>IA local</strong><b>R$ 0</b>
+                <small>OCR com Tesseract.js, leitura de PDF com PDF.js e criptografia com Web Crypto. Nenhuma API de IA paga.</small>
+                <button class="btn btn-secondary" type="button" disabled>No aparelho</button>
+              </div>
+              <div class="plan-card">
+                <span class="plan-kicker">PUBLICAÇÃO</span><strong>Pages + Supabase</strong><b>R$ 0</b>
+                <small>Cloudflare Pages Free + Supabase Free. Se o limite gratuito acabar, o app bloqueia novas sincronizações em vez de comprar capacidade.</small>
+                <button class="btn btn-secondary" type="button" disabled>Sem cartão no app</button>
+              </div>
+            </div>
+            <p class="security-note">Para impedir consumo silencioso de armazenamento, os links temporários com cópia na nuvem ficam desativados nesta edição. O arquivo local continua disponível normalmente.</p>
+          </article>
+
+          <article class="panel">
+            <h3>Seus dados</h3>
+            <p class="muted">Baixe uma cópia legível dos seus metadados e arquivos ou mantenha um backup criptografado para restauração.</p>
+            <div class="setting-actions wrap-actions">
+              <button id="exportPortableDataButton" class="btn btn-primary" type="button">Exportar meus dados</button>
+              <button id="accountBackupButton" class="btn btn-secondary" type="button">Backup criptografado</button>
+            </div>
+            <p class="security-note">A exportação legível não é criptografada. Guarde o arquivo em local seguro.</p>
+          </article>
+
+          <article class="panel">
+            <h3>Histórico de segurança</h3>
+            <p class="muted">Atividades de segurança e sincronização da sua conta. Não registramos nomes nem conteúdo dos documentos.</p>
+            <div id="securityEventsList" class="security-events"><div class="empty-state"><strong>Sem eventos</strong>Conecte sua conta para registrar o histórico.</div></div>
+            <button id="refreshSecurityEventsButton" class="btn btn-secondary" type="button">Atualizar histórico</button>
+          </article>
+
+          <article class="panel">
+            <h3>Privacidade e direitos</h3>
+            <p class="muted">Consulte os termos, a política de privacidade e exerça seus controles de conta.</p>
+            <div class="legal-links"><a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a><a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a></div>
+            <div class="setting-actions wrap-actions">
+              <button id="deleteCloudAccountButton" class="btn btn-danger" type="button" disabled>Excluir conta e dados da nuvem</button>
+            </div>
+            <p class="security-note">A exclusão da conta da nuvem não apaga automaticamente a cópia local deste dispositivo. Você escolhe se quer apagá-la também.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="view-settings" class="view">
+        <div class="section-title-row">
+          <div><p class="eyebrow">CONTROLE</p><h2>Configurações</h2><p class="muted">Backup, privacidade e manutenção do seu cofre local.</p></div>
+        </div>
+
+        <div class="settings-grid">
+          <article class="panel setting-card">
+            <h3>Seu perfil</h3>
+            <p class="muted">Seu nome fica protegido no cofre. Quando a nuvem estiver ativa, a conta também serve para sincronizar dispositivos.</p>
+            <div class="compact-form">
+              <label>Nome<input id="profileNameInput" maxlength="80" placeholder="Seu nome" /></label>
+              <label>E-mail<input id="profileEmailInput" type="email" maxlength="120" placeholder="voce@exemplo.com" /></label>
+              <button id="saveProfileButton" class="btn btn-primary" type="button">Salvar perfil</button>
+            </div>
+          </article>
+
+          <article class="panel setting-card cloud-card">
+            <div class="setting-title-line"><h3>☁ Nuvem segura</h3><span id="cloudStateBadge" class="badge badge-neutral">Não configurada</span></div>
+            <p id="cloudStateText" class="muted">Conecte um projeto Supabase Free para sincronizar notebook e celular sem custo fixo.</p>
+            <p id="cloudLastSync" class="security-note">Nenhuma sincronização ainda.</p>
+            <div class="setting-actions wrap-actions">
+              <button id="configureCloudButton" class="btn btn-secondary" type="button">Configurar nuvem</button>
+              <button id="cloudLoginButton" class="btn btn-primary" type="button">Entrar / criar conta grátis</button>
+              <button id="syncNowButton" class="btn btn-dark" type="button" disabled>↻ Sincronizar agora</button>
+              <button id="cloudSignOutButton" class="btn btn-ghost hidden" type="button">Sair da conta</button>
+            </div>
+          </article>
+
+          <article class="panel setting-card security-card">
+            <h3>🛡 Segurança da conta</h3>
+            <p class="muted">Proteja o acesso com autenticador, passkey e um código independente de recuperação do cofre.</p>
+            <div class="security-list">
+              <div><strong>2FA por aplicativo autenticador</strong><span id="mfaState">Requer conta na nuvem</span><button id="setupMfaButton" class="btn btn-secondary" type="button" disabled>Configurar 2FA</button></div>
+              <div><strong>Passkey</strong><span id="passkeyState">Requer conta e recurso habilitado no Supabase</span><button id="registerPasskeyButton" class="btn btn-secondary" type="button" disabled>Cadastrar passkey</button></div>
+              <div><strong>Código de recuperação do cofre</strong><span id="recoveryState">Ainda não criado</span><button id="generateRecoveryButton" class="btn btn-secondary" type="button">Gerar código</button></div>
+              <div><strong>Senha-mestra</strong><span>Troca sem reencriptar os arquivos</span><button id="changeMasterPasswordButton" class="btn btn-secondary" type="button">Alterar senha</button></div>
+            </div>
+          </article>
+
+          <article class="panel setting-card">
+            <h3>Leitura inteligente</h3>
+            <p class="muted">PDFs com texto são lidos diretamente. Imagens e PDFs escaneados usam OCR local no navegador.</p>
+            <div class="ai-status"><span class="ai-dot"></span><div><strong>Motor local ativado</strong><small>O conteúdo do documento não é enviado para um servidor de IA.</small></div></div>
+          </article>
+
+          <article class="panel setting-card">
+            <h3>Backup criptografado</h3>
+            <p class="muted">Exporte uma cópia completa. O backup continua protegido pela mesma senha-mestra.</p>
+            <div class="setting-actions">
+              <button id="exportBackup" class="btn btn-primary">Exportar backup</button>
+              <label class="btn btn-secondary file-label">Importar backup<input id="importBackupInput" type="file" accept="application/json,.json" hidden /></label>
+            </div>
+          </article>
+
+          <article class="panel setting-card">
+            <h3>Armazenamento</h3>
+            <p id="storageInfo" class="muted">Calculando...</p>
+            <p class="security-note">O dispositivo mantém uma cópia criptografada local. Quando a nuvem estiver ativa, a sincronização envia apenas cifras e metadados também cifrados.</p>
+          </article>
+
+          <article class="panel setting-card danger-card">
+            <h3>Zona de risco</h3>
+            <p class="muted">Apaga permanentemente todos os documentos e a configuração do cofre neste dispositivo.</p>
+            <button id="resetVault" class="btn btn-danger">Apagar todo o cofre</button>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="documentModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="documentModalTitle">
+    <div class="modal-card modal-wide">
+      <div class="modal-head">
+        <div><p class="eyebrow">NOVO ITEM</p><h2 id="documentModalTitle">Guardar documento</h2></div>
+        <button class="icon-btn" data-close-modal="documentModal" aria-label="Fechar">×</button>
+      </div>
+
+      <form id="documentForm" class="document-form">
+        <div class="dropzone" id="dropzone">
+          <input id="documentFile" type="file" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx,.txt" hidden />
+          <div class="drop-icon">⇧</div>
+          <strong id="dropzoneTitle">Clique ou arraste um arquivo</strong>
+          <span id="dropzoneSubtitle">PDF, imagem, Office ou texto</span>
+          <button id="chooseFileButton" type="button" class="btn btn-secondary">Escolher arquivo</button>
+        </div>
+
+        <div id="smartAnalysis" class="smart-analysis hidden">
+          <div class="smart-head">
+            <div><span class="ai-badge">✦ LEITURA INTELIGENTE</span><strong id="smartStatus">Pronto para analisar</strong></div>
+            <span id="smartConfidence" class="confidence-pill hidden"></span>
+          </div>
+          <div class="progress-track"><div id="smartProgress" class="progress-bar"></div></div>
+          <p id="smartMessage" class="muted">O sistema vai ler o documento e sugerir os campos abaixo.</p>
+          <div id="smartSuggestions" class="suggestion-row hidden"></div>
+          <div class="smart-actions">
+            <button id="analyzeDocumentButton" type="button" class="btn btn-dark">✦ Analisar documento</button>
+            <button id="showExtractedTextButton" type="button" class="btn btn-secondary hidden">Ver texto extraído</button>
+          </div>
+          <pre id="extractedTextPreview" class="extracted-text hidden"></pre>
+        </div>
+
+        <div class="form-grid">
+          <label class="span-2">Título do documento
+            <input id="docTitle" required maxlength="120" placeholder="Ex.: CNH, Nota fiscal da TV" />
+          </label>
+          <label>Categoria
+            <select id="docCategory" required></select>
+          </label>
+          <label>Emissor / empresa
+            <input id="docIssuer" maxlength="100" placeholder="Ex.: DETRAN, Samsung" />
+          </label>
+          <label>Data do documento
+            <input id="docIssueDate" type="date" />
+          </label>
+          <label>Validade / vencimento
+            <input id="docExpiryDate" type="date" />
+          </label>
+          <label class="span-2">Tags
+            <input id="docTags" maxlength="180" placeholder="Ex.: carro, seguro, 2026 (separe por vírgulas)" />
+          </label>
+          <label class="span-2">Observações
+            <textarea id="docNotes" rows="3" maxlength="600" placeholder="Informações que você quer lembrar sobre este documento"></textarea>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" data-close-modal="documentModal">Cancelar</button>
+          <button id="saveDocumentButton" type="submit" class="btn btn-primary">Criptografar e guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="viewerModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+    <div class="modal-card modal-wide">
+      <div class="modal-head">
+        <div><p class="eyebrow" id="viewerCategory">DOCUMENTO</p><h2 id="viewerTitle">Documento</h2></div>
+        <button class="icon-btn" data-close-modal="viewerModal" aria-label="Fechar">×</button>
+      </div>
+      <div id="viewerBody" class="viewer-body"></div>
+      <div class="modal-actions split-actions">
+        <button id="deleteDocumentButton" class="btn btn-danger">Excluir</button>
+        <div>
+          <button id="shareDocumentButton" class="btn btn-secondary" disabled title="Desativado no Modo Zero Custo">Compartilhar por link · beta desativado</button>
+          <button id="downloadDocumentButton" class="btn btn-secondary">Baixar original</button>
+          <button id="openDocumentButton" class="btn btn-primary">Abrir arquivo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="cloudConfigModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">V6 ZERO</p><h2>Conectar Supabase</h2></div><button class="icon-btn" data-close-modal="cloudConfigModal">×</button></div>
+      <div class="document-form">
+        <p class="muted">Cole a URL do projeto e a chave <strong>publishable/anon</strong>. Nunca use service_role ou uma secret key no navegador.</p>
+        <label>Project URL<input id="supabaseUrlInput" type="url" placeholder="https://seu-projeto.supabase.co" /></label>
+        <label>Publishable / anon key<input id="supabaseKeyInput" type="password" autocomplete="off" placeholder="sb_publishable_... ou anon JWT" /></label>
+        <div class="modal-actions"><button class="btn btn-secondary" data-close-modal="cloudConfigModal" type="button">Cancelar</button><button id="saveCloudConfigButton" class="btn btn-primary" type="button">Salvar conexão</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="cloudAuthModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">CONTA</p><h2>Seu Cofre na nuvem</h2></div><button class="icon-btn" data-close-modal="cloudAuthModal">×</button></div>
+      <div class="document-form">
+        <div class="auth-tabs"><button id="authTabLogin" class="btn btn-dark" type="button">Entrar</button><button id="authTabSignup" class="btn btn-secondary" type="button">Criar conta</button></div>
+        <label id="cloudNameLabel" class="hidden">Nome<input id="cloudNameInput" maxlength="80" placeholder="Seu nome" /></label>
+        <label>E-mail<input id="cloudEmailInput" type="email" autocomplete="email" placeholder="voce@exemplo.com" /></label>
+        <label>Senha da conta<input id="cloudPasswordInput" type="password" autocomplete="current-password" minlength="8" placeholder="Senha da conta" /></label>
+        <p class="security-note">A senha da conta e a senha-mestra do cofre são coisas diferentes. A conta autentica você; a senha-mestra abre a criptografia.</p>
+        <label id="cloudConsentLabel" class="consent-row hidden"><input id="cloudConsentInput" type="checkbox" /> <span>Li e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span></label>
+        <button id="cloudAuthSubmitButton" class="btn btn-primary btn-block" type="button">Entrar</button>
+        <button id="cloudPasskeyLoginButton" class="btn btn-secondary btn-block" type="button">Entrar com passkey</button>
+        <button id="cloudForgotPasswordButton" class="text-btn" type="button">Esqueci a senha da conta</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mfaModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">2FA</p><h2 id="mfaModalTitle">Verificação</h2></div><button class="icon-btn" data-close-modal="mfaModal">×</button></div>
+      <div class="document-form">
+        <div id="mfaQrBox" class="qr-box hidden"><img id="mfaQrImage" alt="QR Code do autenticador" /><code id="mfaSecretText"></code></div>
+        <p id="mfaMessage" class="muted">Digite o código de 6 dígitos do seu aplicativo autenticador.</p>
+        <label>Código<input id="mfaCodeInput" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="123456" /></label>
+        <button id="verifyMfaButton" class="btn btn-primary btn-block" type="button">Verificar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="restoreVaultModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">RESTAURAR</p><h2>Abrir cofre da nuvem</h2></div><button class="icon-btn" data-close-modal="restoreVaultModal">×</button></div>
+      <div class="document-form">
+        <p class="muted">Entre com sua senha-mestra ou com o código de recuperação. O servidor não conhece nenhum deles.</p>
+        <label>Senha-mestra<input id="restoreMasterPasswordInput" type="password" autocomplete="current-password" placeholder="Sua senha-mestra" /></label>
+        <div class="divider"><span>ou</span></div>
+        <label>Código de recuperação<input id="restoreRecoveryCodeInput" type="text" autocomplete="off" placeholder="XXXXX-XXXXX-..." /></label>
+        <button id="restoreVaultSubmitButton" class="btn btn-primary btn-block" type="button">Restaurar neste dispositivo</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="recoveryModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">RECUPERAÇÃO</p><h2>Guarde este código</h2></div><button class="icon-btn" data-close-modal="recoveryModal">×</button></div>
+      <div class="document-form">
+        <p class="muted">Este código consegue abrir a chave do seu cofre caso você esqueça a senha-mestra. Ele é exibido uma única vez.</p>
+        <code id="recoveryCodeDisplay" class="recovery-code"></code>
+        <button id="copyRecoveryCodeButton" class="btn btn-primary btn-block" type="button">Copiar código</button>
+        <p class="security-note">Guarde fora do MasterSafe, de preferência em um gerenciador de senhas ou cópia física protegida.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="changePasswordModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">CHAVE DO COFRE</p><h2>Alterar senha-mestra</h2></div><button class="icon-btn" data-close-modal="changePasswordModal">×</button></div>
+      <div class="document-form">
+        <label>Nova senha-mestra<input id="newMasterPasswordInput" type="password" minlength="10" autocomplete="new-password" /></label>
+        <label>Confirmar nova senha<input id="newMasterPasswordConfirmInput" type="password" minlength="10" autocomplete="new-password" /></label>
+        <button id="saveNewMasterPasswordButton" class="btn btn-primary btn-block" type="button">Atualizar senha-mestra</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="shareModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">MODO ZERO CUSTO</p><h2>Compartilhamento por link</h2></div><button class="icon-btn" data-close-modal="shareModal">×</button></div>
+      <div class="document-form">
+        <p class="muted">Uma cópia é cifrada com uma chave descartável. A chave fica no fragmento do link e não é enviada ao servidor.</p>
+        <label>Expiração<select id="shareExpirySelect"><option value="900">15 minutos</option><option value="3600" selected>1 hora</option><option value="86400">24 horas</option><option value="604800">7 dias</option></select></label>
+        <button id="createShareLinkButton" class="btn btn-primary btn-block" type="button">Criar link seguro</button>
+        <div id="shareResult" class="hidden"><label>Link<input id="shareLinkOutput" readonly /></label><div class="setting-actions"><button id="copyShareLinkButton" class="btn btn-secondary" type="button">Copiar</button><button id="revokeShareButton" class="btn btn-danger" type="button">Revogar agora</button></div></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="onboardingModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card modal-wide">
+      <div class="modal-head"><div><p class="eyebrow">BEM-VINDO À V6 ZERO</p><h2>Prepare seu Cofre em 4 passos</h2></div><button class="icon-btn" data-close-modal="onboardingModal">×</button></div>
+      <div class="onboarding-grid">
+        <button class="onboarding-step" id="onboardingAddDocument" type="button"><span>1</span><div><strong>Guarde um documento</strong><small>Teste upload, criptografia e leitura inteligente.</small></div></button>
+        <button class="onboarding-step" id="onboardingCloud" type="button"><span>2</span><div><strong>Conecte a nuvem</strong><small>Sincronize notebook e celular com conteúdo cifrado.</small></div></button>
+        <button class="onboarding-step" id="onboardingRecovery" type="button"><span>3</span><div><strong>Crie recuperação</strong><small>Gere o código que salva seu cofre se a senha for esquecida.</small></div></button>
+        <button class="onboarding-step" id="onboardingAccount" type="button"><span>4</span><div><strong>Conheça seus controles</strong><small>Veja exportação, privacidade e histórico de segurança.</small></div></button>
+      </div>
+      <div class="modal-actions"><button id="finishOnboardingButton" class="btn btn-primary" type="button">Concluir apresentação</button></div>
+    </div>
+  </div>
+
+  <script src="smart.js"></script>
+  <script src="cloud-config.js"></script>
+  <script src="cloud.js"></script>
+  <script src="app.js" defer></script>
+  <script src="beta.js" defer></script>
+</body>
+</html>

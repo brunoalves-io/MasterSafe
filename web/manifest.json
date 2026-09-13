@@ -1,0 +1,17 @@
+{
+  "name": "MasterSafe",
+  "short_name": "MasterSafe",
+  "description": "Cofre local-first para documentos pessoais, com criptografia no dispositivo e sincronização gratuita opcional.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

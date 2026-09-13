@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Documento compartilhado · MasterSafe</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f5f7fb;color:#0f172a;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px}.card{width:min(620px,100%);background:#fff;border:1px solid #e2e8f0;border-radius:24px;padding:28px;box-shadow:0 18px 60px rgba(15,23,42,.08)}.lock{font-size:2rem}.eyebrow{font-size:.72rem;letter-spacing:.12em;color:#64748b;font-weight:800;margin:16px 0 5px}h1{margin:0 0 8px;font-size:1.55rem}.muted{color:#64748b;line-height:1.55}.status{padding:14px;border-radius:14px;background:#f8fafc;margin:18px 0}.btn{width:100%;border:0;border-radius:13px;padding:13px 16px;background:#0f172a;color:#fff;font-weight:800;cursor:pointer;font-size:.95rem}.btn:disabled{opacity:.5;cursor:not-allowed}.small{font-size:.78rem;color:#64748b;margin-top:14px}.danger{background:#fff1f2;color:#9f1239}.safe{background:#ecfdf5;color:#065f46}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="lock">🔐</div>
+    <p class="eyebrow">VAULT OF LIFE</p>
+    <h1 id="title">Documento compartilhado</h1>
+    <p class="muted">Este arquivo foi criptografado antes de ser enviado. A chave de abertura veio no fragmento do link e não é enviada ao servidor.</p>
+    <div id="status" class="status">Preparando abertura segura...</div>
+    <button id="openButton" class="btn" type="button" disabled>Abrir / baixar documento</button>
+    <p class="small">Se o link expirou ou foi revogado, peça ao remetente um novo compartilhamento.</p>
+  </main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+function b64urlToBytes(value){let s=String(value||'').replaceAll('-','+').replaceAll('_','/');while(s.length%4)s+='=';const b=atob(s);const a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+function fail(message){$('status').textContent=message;$('status').className='status danger';$('openButton').disabled=true}
+(async()=>{
+  try{
+    if(!crypto?.subtle) throw new Error('Este navegador não oferece criptografia segura.');
+    const query=new URLSearchParams(location.search);
+    const frag=new URLSearchParams(location.hash.slice(1));
+    const signedUrl=query.get('u'); const fileName=query.get('n')||'documento'; const mime=query.get('m')||'application/octet-stream';
+    const keyRaw=b64urlToBytes(frag.get('k')); const iv=b64urlToBytes(frag.get('iv'));
+    if(!signedUrl||keyRaw.length!==32||iv.length!==12) throw new Error('Link incompleto ou inválido.');
+    $('title').textContent=fileName;
+    const response=await fetch(signedUrl,{cache:'no-store'});
+    if(!response.ok) throw new Error('O link expirou, foi revogado ou não está mais disponível.');
+    const cipher=await response.arrayBuffer();
+    const key=await crypto.subtle.importKey('raw',keyRaw,{name:'AES-GCM'},false,['decrypt']);
+    const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv},key,cipher);
+    const blob=new Blob([plain],{type:mime});
+    const url=URL.createObjectURL(blob);
+    $('status').textContent='Documento autenticado e descriptografado somente neste navegador.';
+    $('status').className='status safe';
+    $('openButton').disabled=false;
+    $('openButton').addEventListener('click',()=>{
+      const a=document.createElement('a');a.href=url;a.download=fileName;document.body.appendChild(a);a.click();a.remove();
+      if(mime==='application/pdf'||mime.startsWith('image/')) window.open(url,'_blank','noopener');
+    });
+    addEventListener('beforeunload',()=>URL.revokeObjectURL(url));
+  }catch(error){console.error(error);fail(error.message||'Não foi possível abrir este compartilhamento.');}
+})();
+</script>
+</body>
+</html>
