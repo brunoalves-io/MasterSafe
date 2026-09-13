@@ -1,6 +1,6 @@
 'use strict';
 
-/* MasterSafe V7.3.2 - quota elastica, precos modulares e ajustes visuais da conta. */
+/* MasterSafe V7.3.2 - quota elástica, preços modulares e ajustes visuais da conta. */
 window.MasterSafeQuota = (() => {
   const MB = 1024 * 1024;
 
@@ -12,7 +12,7 @@ window.MasterSafeQuota = (() => {
   }
 
   async function getInfo() {
-    if (!window.CofreCloud) throw new Error('Modulo de nuvem indisponivel.');
+    if (!window.CofreCloud) throw new Error('Módulo de nuvem indisponível.');
     const cfg = window.CofreCloud.getConfig?.();
     const session = await window.CofreCloud.getSession?.();
     if (!cfg?.url || !cfg?.publishableKey || !session?.access_token) {
@@ -32,7 +32,7 @@ window.MasterSafeQuota = (() => {
 
     const raw = await response.text();
     if (!response.ok) {
-      let message = 'Nao foi possivel consultar a quota dinamica.';
+      let message = 'Não foi possível consultar a quota dinâmica.';
       try { message = JSON.parse(raw)?.message || message; } catch {}
       throw new Error(message);
     }
@@ -97,7 +97,7 @@ window.MasterSafeQuota = (() => {
     const description = panel.querySelector('.panel-head .muted');
     const badge = panel.querySelector('#zeroCostBadge');
     if (heading) heading.textContent = 'Planos e recursos';
-    if (description) description.textContent = 'O cofre base continua gratuito. Recursos adicionais podem ter preco proprio, sem alterar a protecao local dos seus documentos.';
+    if (description) description.textContent = 'O cofre base continua gratuito. Recursos adicionais podem ter preço próprio, sem alterar a proteção local dos seus documentos.';
     if (badge) badge.textContent = 'Base R$ 0';
   }
 
@@ -113,22 +113,22 @@ window.MasterSafeQuota = (() => {
     const infraCard = cards[2];
 
     if (quotaCard) {
-      quotaCard.querySelector('.plan-kicker')?.replaceChildren(document.createTextNode('NUVEM ELASTICA'));
-      quotaCard.querySelector('strong')?.replaceChildren(document.createTextNode('Ate 500 MB'));
+      quotaCard.querySelector('.plan-kicker')?.replaceChildren(document.createTextNode('NUVEM ELÁSTICA'));
+      quotaCard.querySelector('strong')?.replaceChildren(document.createTextNode('Até 500 MB'));
       quotaCard.querySelector('b')?.replaceChildren(document.createTextNode('R$ 0'));
       const small = quotaCard.querySelector('small');
       if (small) {
         const current = Number(info?.limit || 500 * MB);
         const file = Number(info?.displayFileLimit || 25 * MB);
-        small.textContent = `Quota ajustada automaticamente conforme o espaco disponivel. Limite atual: ${fmt(current)}; ate ${fmt(file)} por arquivo.`;
+        small.textContent = `Quota ajustada automaticamente conforme o espaço disponível. Limite atual: ${fmt(current)}; até ${fmt(file)} por arquivo.`;
       }
       const button = quotaCard.querySelector('button');
-      if (button) button.textContent = 'Quota dinamica ativa';
+      if (button) button.textContent = 'Quota dinâmica ativa';
     }
 
     if (aiCard) {
-      aiCard.querySelector('.plan-kicker')?.replaceChildren(document.createTextNode('INTELIGENCIA'));
-      aiCard.querySelector('strong')?.replaceChildren(document.createTextNode('IA Hibrida'));
+      aiCard.querySelector('.plan-kicker')?.replaceChildren(document.createTextNode('INTELIGÊNCIA'));
+      aiCard.querySelector('strong')?.replaceChildren(document.createTextNode('IA Híbrida'));
       aiCard.querySelector('b')?.replaceChildren(document.createTextNode('R$ 9,99'));
       const small = aiCard.querySelector('small');
       if (small) small.textContent = 'OCR e leitura de PDFs acontecem no aparelho. O Pergunte ao Cofre pode usar IA online opcional, sem enviar o arquivo original.';
@@ -141,13 +141,13 @@ window.MasterSafeQuota = (() => {
       infraCard.querySelector('strong')?.replaceChildren(document.createTextNode('Cloudflare + Supabase'));
       infraCard.querySelector('b')?.replaceChildren(document.createTextNode('R$ 14,99'));
       const small = infraCard.querySelector('small');
-      if (small) small.textContent = 'Publicacao, autenticacao e sincronizacao em nuvem com protecao automatica de capacidade e continuidade do cofre local.';
+      if (small) small.textContent = 'Publicação, autenticação e sincronização em nuvem com proteção automática de capacidade e continuidade do cofre local.';
       const button = infraCard.querySelector('button');
-      if (button) button.textContent = 'Protecao de custo ativa';
+      if (button) button.textContent = 'Proteção de custo ativa';
     }
 
     const note = document.querySelector('.zero-cost-grid')?.closest('.panel')?.querySelector('.security-note');
-    if (note) note.textContent = 'A quota da nuvem e elastica e pode variar conforme o uso global. Nenhum documento local e apagado se a capacidade da nuvem acabar.';
+    if (note) note.textContent = 'A quota da nuvem é elástica e pode variar conforme o uso global. Nenhum documento local é apagado se a capacidade da nuvem acabar.';
   }
 
   async function refreshAccountUI() {
