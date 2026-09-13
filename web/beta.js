@@ -3,7 +3,7 @@
   'use strict';
 
   const ONBOARDING_KEY = 'cofre_v6_onboarding_complete';
-  const CLOUD_LIMIT = 25 * 1024 * 1024;
+  const CLOUD_LIMIT = 250 * 1024 * 1024;
   const EVENT_LABELS = {
     'account.connected': ['◎', 'Conta conectada'],
     'vault.sync': ['↻', 'Sincronização manual'],
@@ -80,7 +80,7 @@
       $('accountCloudBadge').className = `badge ${connected ? 'badge-safe' : 'badge-neutral'}`;
     }
     if ($('accountPlanDescription')) $('accountPlanDescription').textContent = connected
-      ? `Conta ${status.user.email || ''}. Seus arquivos são cifrados antes da sincronização. Limite defensivo do beta: 25 MB por usuário.`
+      ? `Conta ${status.user.email || ''}. Seus arquivos são cifrados antes da sincronização. Limite defensivo do beta: 250 MB por usuário.`
       : 'O cofre local funciona sem servidor e sem mensalidade. A nuvem gratuita é opcional para sincronizar outros dispositivos.';
 
     if ($('accountUsageText')) $('accountUsageText').textContent = connected ? `${fmt(usage)} de ${fmt(CLOUD_LIMIT)}` : 'Somente local';
@@ -134,6 +134,11 @@
     closeModal('onboardingModal');
   }
 
+  function updateQuotaCopy() {
+    const copy = document.querySelector('.plan-card[data-plan="free"] small');
+    if (copy) copy.textContent = 'Cofre local no dispositivo + sincronização opcional de até 250 MB na nuvem, com no máximo 25 MB por arquivo.';
+  }
+
   function wire() {
     $('exportPortableDataButton')?.addEventListener('click', async () => {
       const button = $('exportPortableDataButton');
@@ -167,6 +172,7 @@
       if ($('view-account')?.classList.contains('active')) renderAccount();
     }).observe(chip, { childList:true, subtree:true, characterData:true });
 
+    updateQuotaCopy();
     setTimeout(maybeShowOnboarding, 400);
   }
 
