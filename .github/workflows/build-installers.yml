@@ -1,0 +1,190 @@
+name: Build MasterSafe Installers
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mastersafe-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: Windows installer
+    runs-on: windows-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Install dependencies
+        shell: pwsh
+        run: npm install --no-audit --no-fund
+
+      - name: Build Windows installer
+        shell: pwsh
+        run: npm run desktop:build
+
+      - name: Prepare Windows installer
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          $installer = Get-ChildItem -Path "src-tauri/target/release/bundle/nsis" -Filter "*.exe" -File | Select-Object -First 1
+          if (-not $installer) { throw "Instalador NSIS não encontrado." }
+          Copy-Item $installer.FullName "dist/MasterSafe-Windows-Setup.exe"
+          Get-Item "dist/MasterSafe-Windows-Setup.exe" | Format-List Name,Length,FullName
+
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: MasterSafe-Windows-Setup
+          path: dist/MasterSafe-Windows-Setup.exe
+          retention-days: 7
+          if-no-files-found: error
+
+  android:
+    name: Android APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK and NDK
+        shell: bash
+        run: |
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-35" \
+            "build-tools;35.0.0" \
+            "ndk;28.2.13676358"
+          echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_ENV"
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_ENV"
+
+      - name: Setup Rust Android targets
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Initialize Android project
+        run: npm run tauri android init
+
+      - name: Build installable debug APK
+        run: npm run tauri android build -- --debug --apk
+
+      - name: Prepare Android APK
+        shell: bash
+        run: |
+          mkdir -p dist
+          APK="$(find src-tauri/gen/android/app/build/outputs/apk -type f -name '*debug*.apk' | head -n 1 || true)"
+          if [ -z "$APK" ]; then
+            echo "Nenhum APK encontrado. Saídas disponíveis:"
+            find src-tauri/gen/android/app/build/outputs -type f || true
+            exit 1
+          fi
+          cp "$APK" dist/MasterSafe-Android.apk
+          ls -lh dist/MasterSafe-Android.apk
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MasterSafe-Android-APK
+          path: dist/MasterSafe-Android.apk
+          retention-days: 7
+          if-no-files-found: error
+
+  release:
+    name: Publish easy downloads
+    runs-on: ubuntu-latest
+    needs: [windows, android]
+    if: ${{ always() && (needs.windows.result == 'success' || needs.android.result == 'success') }}
+
+    steps:
+      - name: Download Windows installer
+        if: ${{ needs.windows.result == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: MasterSafe-Windows-Setup
+          path: release/windows
+
+      - name: Download Android APK
+        if: ${{ needs.android.result == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: MasterSafe-Android-APK
+          path: release/android
+
+      - name: Create or update MasterSafe Beta release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if ! gh release view beta-latest --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create beta-latest \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "MasterSafe Beta" \
+              --prerelease \
+              --notes "Instaladores automáticos do MasterSafe. Windows: execute MasterSafe-Windows-Setup.exe. Android: instale MasterSafe-Android.apk."
+          fi
+
+          assets=()
+          [ -f release/windows/MasterSafe-Windows-Setup.exe ] && assets+=(release/windows/MasterSafe-Windows-Setup.exe)
+          [ -f release/android/MasterSafe-Android.apk ] && assets+=(release/android/MasterSafe-Android.apk)
+
+          if [ ${#assets[@]} -eq 0 ]; then
+            echo "Nenhum instalador disponível para publicar."
+            exit 1
+          fi
+
+          gh release upload beta-latest "${assets[@]}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --clobber
