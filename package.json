@@ -1,8 +1,8 @@
 {
   "name": "mastersafe-native",
   "private": true,
-  "version": "7.2.1",
-  "description": "MasterSafe Desktop e Android com IA opcional via Groq Free e Supabase Edge Functions",
+  "version": "7.3.0",
+  "description": "MasterSafe Desktop e Android com IA opcional e quota elástica Zero Custo",
   "scripts": {
     "tauri": "tauri",
     "desktop:dev": "tauri dev",

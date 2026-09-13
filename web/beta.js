@@ -3,7 +3,7 @@
   'use strict';
 
   const ONBOARDING_KEY = 'cofre_v6_onboarding_complete';
-  const CLOUD_LIMIT = 250 * 1024 * 1024;
+  const FALLBACK_CLOUD_LIMIT = 500 * 1024 * 1024;
   const EVENT_LABELS = {
     'account.connected': ['◎', 'Conta conectada'],
     'vault.sync': ['↻', 'Sincronização manual'],
@@ -68,6 +68,10 @@
     const status = await window.CofreCloud.status().catch(() => ({ configured:false, connected:false }));
     const connected = Boolean(status?.connected && status?.user);
     const usage = connected ? await window.CofreCloud.getUsageBytes().catch(() => 0) : 0;
+    const quota = connected && window.MasterSafeQuota ? await window.MasterSafeQuota.getInfo().catch(() => null) : null;
+    const cloudLimit = Number(quota?.limit || FALLBACK_CLOUD_LIMIT);
+    const fileLimit = Number(quota?.displayFileLimit || 25 * 1024 * 1024);
+    const globalRemaining = Number(quota?.globalRemaining || 0);
     const fmt = window.CofreBetaBridge.formatBytes || (n => `${n} bytes`);
 
     if ($('accountPlanName')) $('accountPlanName').textContent = connected ? 'Zero Custo Cloud' : 'Local';
@@ -80,11 +84,13 @@
       $('accountCloudBadge').className = `badge ${connected ? 'badge-safe' : 'badge-neutral'}`;
     }
     if ($('accountPlanDescription')) $('accountPlanDescription').textContent = connected
-      ? `Conta ${status.user.email || ''}. Seus arquivos são cifrados antes da sincronização. Limite defensivo do beta: 250 MB por usuário.`
+      ? `Conta ${status.user.email || ''}. Seus arquivos são cifrados antes da sincronização. Quota elástica atual: ${fmt(cloudLimit)}; até ${fmt(fileLimit)} por arquivo.`
       : 'O cofre local funciona sem servidor e sem mensalidade. A nuvem gratuita é opcional para sincronizar outros dispositivos.';
 
-    if ($('accountUsageText')) $('accountUsageText').textContent = connected ? `${fmt(usage)} de ${fmt(CLOUD_LIMIT)}` : 'Somente local';
-    if ($('accountUsageBar')) $('accountUsageBar').style.width = connected ? `${Math.min(100, (usage / CLOUD_LIMIT) * 100)}%` : '0%';
+    if ($('accountUsageText')) $('accountUsageText').textContent = connected
+      ? `${fmt(usage)} de ${fmt(cloudLimit)}${globalRemaining > 0 ? ` · ${fmt(globalRemaining)} livres no beta` : ''}`
+      : 'Somente local';
+    if ($('accountUsageBar')) $('accountUsageBar').style.width = connected && cloudLimit > 0 ? `${Math.min(100, (usage / cloudLimit) * 100)}%` : '0%';
     if ($('deleteCloudAccountButton')) $('deleteCloudAccountButton').disabled = !connected;
 
     document.querySelectorAll('.plan-card').forEach((card, i) => card.classList.toggle('active', i === 0));
@@ -136,7 +142,7 @@
 
   function updateQuotaCopy() {
     const copy = document.querySelector('.plan-card[data-plan="free"] small');
-    if (copy) copy.textContent = 'Cofre local no dispositivo + sincronização opcional de até 250 MB na nuvem, com no máximo 25 MB por arquivo.';
+    if (copy) copy.textContent = 'Cofre local no dispositivo + quota de nuvem elástica: até 500 MB por usuário enquanto houver espaço no beta, com até 25 MB por arquivo.';
   }
 
   function wire() {
@@ -179,12 +185,16 @@
   wire();
 })();
 
-/* MasterSafe V7.2: carrega o módulo opcional de IA sem alterar o núcleo do cofre. */
+/* MasterSafe V7.3: carrega módulos opcionais sem alterar o núcleo do cofre. */
 (() => {
-  if (document.querySelector('script[data-mastersafe-ai]')) return;
-  const script = document.createElement('script');
-  script.src = 'ai.js';
-  script.dataset.mastersafeAi = '1';
-  script.async = true;
-  document.head.appendChild(script);
+  const load = (src, marker) => {
+    if (document.querySelector(`script[${marker}]`)) return;
+    const script = document.createElement('script');
+    script.src = src;
+    script.setAttribute(marker, '1');
+    script.async = true;
+    document.head.appendChild(script);
+  };
+  load('quota.js', 'data-mastersafe-quota');
+  load('ai.js', 'data-mastersafe-ai');
 })();
