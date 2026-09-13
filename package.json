@@ -1,8 +1,8 @@
 {
   "name": "mastersafe-native",
   "private": true,
-  "version": "7.1.0",
-  "description": "MasterSafe Desktop e Android com build automático no GitHub Actions",
+  "version": "7.2.0",
+  "description": "MasterSafe Desktop e Android com IA opcional via Groq Free e Supabase Edge Functions",
   "scripts": {
     "tauri": "tauri",
     "desktop:dev": "tauri dev",

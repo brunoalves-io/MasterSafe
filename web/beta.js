@@ -172,3 +172,13 @@
 
   wire();
 })();
+
+/* MasterSafe V7.2: carrega o módulo opcional de IA sem alterar o núcleo do cofre. */
+(() => {
+  if (document.querySelector('script[data-mastersafe-ai]')) return;
+  const script = document.createElement('script');
+  script.src = 'ai.js';
+  script.dataset.mastersafeAi = '1';
+  script.async = true;
+  document.head.appendChild(script);
+})();
