@@ -1,4 +1,4 @@
-const CACHE = 'mastersafe-v7-3-1-account-ui';
+const CACHE = 'mastersafe-v7-3-2-pricing-spacing';
 const FILES = [
   './','./index.html','./share.html','./styles.css','./app.js','./smart.js','./cloud-config.js','./cloud.js','./quota.js','./ai.js','./beta.js','./privacidade.html','./termos.html','./manifest.json','./assets/icon.svg'
 ];
