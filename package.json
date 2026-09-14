@@ -1,8 +1,8 @@
 {
   "name": "mastersafe-native",
   "private": true,
-  "version": "7.3.2",
-  "description": "MasterSafe Desktop e Android com IA híbrida, quota elástica e planos modulares",
+  "version": "7.4.0",
+  "description": "MasterSafe Desktop e Android com interface profissional, IA híbrida, quota elástica e planos modulares",
   "scripts": {
     "tauri": "tauri",
     "desktop:dev": "tauri dev",
