@@ -1,16 +1,24 @@
 'use strict';
 
-/* MasterSafe V7.4 — quota elástica, preços modulares e UI profissional. */
+/* MasterSafe V7.4.1 — quota elástica, preços modulares e refinamento profissional. */
 window.MasterSafeQuota = (() => {
   const MB = 1024 * 1024;
 
   function ensureProfessionalUI() {
-    if (document.getElementById('mastersafe-ui-pro')) return;
-    const link = document.createElement('link');
-    link.id = 'mastersafe-ui-pro';
-    link.rel = 'stylesheet';
-    link.href = 'ui-pro.css?v=740';
-    document.head.appendChild(link);
+    if (!document.getElementById('mastersafe-ui-pro')) {
+      const link = document.createElement('link');
+      link.id = 'mastersafe-ui-pro';
+      link.rel = 'stylesheet';
+      link.href = 'ui-pro.css?v=741';
+      document.head.appendChild(link);
+    }
+    if (!document.getElementById('mastersafe-ui-polish')) {
+      const polish = document.createElement('link');
+      polish.id = 'mastersafe-ui-polish';
+      polish.rel = 'stylesheet';
+      polish.href = 'ui-polish.css?v=741';
+      document.head.appendChild(polish);
+    }
   }
 
   function fmt(bytes) {
@@ -49,6 +57,9 @@ window.MasterSafeQuota = (() => {
   }
 
   function patchPlanHeader() {
+    const accountSubtitle = document.querySelector('#view-account .section-title-row .muted');
+    if (accountSubtitle) accountSubtitle.textContent = 'Planos, sincronização, privacidade e controle sobre os seus dados.';
+
     const panel = document.querySelector('.zero-cost-grid')?.closest('.panel');
     if (!panel) return;
     const heading = panel.querySelector('.panel-head h3');
