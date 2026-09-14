@@ -1,6 +1,6 @@
-const CACHE = 'mastersafe-v7-4-professional-ui';
+const CACHE = 'mastersafe-v7-4-1-ux-polish';
 const FILES = [
-  './','./index.html','./share.html','./styles.css','./ui-pro.css','./app.js','./smart.js','./cloud-config.js','./cloud.js','./quota.js','./ai.js','./beta.js','./privacidade.html','./termos.html','./manifest.json','./assets/icon.svg'
+  './','./index.html','./share.html','./styles.css','./ui-pro.css','./ui-polish.css','./app.js','./smart.js','./cloud-config.js','./cloud.js','./quota.js','./ai.js','./beta.js','./privacidade.html','./termos.html','./manifest.json','./assets/icon.svg'
 ];
 self.addEventListener('install', event => event.waitUntil((async()=>{
   await caches.open(CACHE).then(cache => cache.addAll(FILES));
