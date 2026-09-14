@@ -1,8 +1,17 @@
 'use strict';
 
-/* MasterSafe V7.3.2 - quota elástica, preços modulares e ajustes visuais da conta. */
+/* MasterSafe V7.4 — quota elástica, preços modulares e UI profissional. */
 window.MasterSafeQuota = (() => {
   const MB = 1024 * 1024;
+
+  function ensureProfessionalUI() {
+    if (document.getElementById('mastersafe-ui-pro')) return;
+    const link = document.createElement('link');
+    link.id = 'mastersafe-ui-pro';
+    link.rel = 'stylesheet';
+    link.href = 'ui-pro.css?v=740';
+    document.head.appendChild(link);
+  }
 
   function fmt(bytes) {
     const n = Number(bytes || 0);
@@ -39,57 +48,6 @@ window.MasterSafeQuota = (() => {
     return raw ? JSON.parse(raw) : null;
   }
 
-  function ensureUiSpacingStyles() {
-    if (document.getElementById('mastersafe-v732-ui-fixes')) return;
-    const style = document.createElement('style');
-    style.id = 'mastersafe-v732-ui-fixes';
-    style.textContent = `
-      .zero-cost-grid .plan-card {
-        gap: 12px !important;
-        padding: 20px !important;
-        min-height: 196px;
-      }
-      .zero-cost-grid .plan-card .plan-kicker { margin-bottom: 2px; }
-      .zero-cost-grid .plan-card strong { line-height: 1.28; }
-      .zero-cost-grid .plan-card b {
-        line-height: 1.15;
-        margin-top: 1px;
-        margin-bottom: 2px;
-      }
-      .zero-cost-grid .plan-card small {
-        display: block;
-        line-height: 1.65 !important;
-        margin-top: 1px;
-      }
-      .zero-cost-grid .plan-card button { margin-top: auto; }
-      .security-event { padding: 14px 15px !important; gap: 14px !important; }
-      .security-event-copy {
-        min-width: 0;
-        display: grid;
-        gap: 6px;
-        align-content: center;
-      }
-      .security-event-copy strong {
-        display: block;
-        line-height: 1.3;
-      }
-      .security-event-copy small {
-        display: block;
-        line-height: 1.5;
-      }
-      .security-event > small {
-        white-space: nowrap;
-        margin-left: 8px;
-        line-height: 1.4;
-      }
-      @media (max-width: 760px) {
-        .security-event { grid-template-columns: 36px minmax(0,1fr) !important; }
-        .security-event > small { grid-column: 2; margin-left: 0; }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
   function patchPlanHeader() {
     const panel = document.querySelector('.zero-cost-grid')?.closest('.panel');
     if (!panel) return;
@@ -102,7 +60,7 @@ window.MasterSafeQuota = (() => {
   }
 
   function patchZeroCostCards(info = null) {
-    ensureUiSpacingStyles();
+    ensureProfessionalUI();
     patchPlanHeader();
 
     const cards = document.querySelectorAll('.zero-cost-grid .plan-card');
@@ -151,6 +109,7 @@ window.MasterSafeQuota = (() => {
   }
 
   async function refreshAccountUI() {
+    ensureProfessionalUI();
     patchZeroCostCards();
     try {
       const info = await getInfo();
@@ -161,6 +120,7 @@ window.MasterSafeQuota = (() => {
     }
   }
 
+  ensureProfessionalUI();
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => refreshAccountUI(), { once: true });
   } else {
