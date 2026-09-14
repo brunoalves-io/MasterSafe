@@ -33,6 +33,7 @@ Aplicativo para Windows e Android criado para armazenar, organizar, proteger e s
 - `web/ui-pro.css` e `web/ui-polish.css` — camadas profissionais de UX/UI;
 - `src-tauri/` — aplicativo nativo para desktop e Android com Tauri;
 - `supabase/` — funções e recursos utilizados no backend Supabase;
+- `docs/ARQUITETURA.md` — visão técnica da arquitetura do MasterSafe;
 - `package.json` — scripts e dependências do projeto;
 - `.github/workflows/build-installers.yml` — automação dos builds para Windows e Android.
 
@@ -43,6 +44,8 @@ Os documentos são protegidos no dispositivo antes da sincronização com a nuve
 A IA online é opcional. Quando ativada, o MasterSafe seleciona apenas trechos relevantes dos documentos, aplica mascaramento de dados sensíveis e envia esses trechos para a função segura no backend. O arquivo original não é enviado para a API de IA.
 
 A chave da API da Groq fica armazenada como segredo no Supabase e não é incluída no executável do Windows nem no APK Android.
+
+Para mais detalhes técnicos, consulte [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md).
 
 ## Build automático para Windows e Android
 
