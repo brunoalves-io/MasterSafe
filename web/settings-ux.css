@@ -1,0 +1,351 @@
+/* MasterSafe 7.10.0 — refinamento UX/UI da aba Configurações. */
+
+#view-settings{
+  padding-bottom:42px !important;
+}
+
+/* Cabeçalho mais compacto, sem o espaço vazio dos heros das outras telas. */
+#view-settings .section-title-row{
+  min-height:150px !important;
+  padding:28px 0 24px !important;
+  margin:0 !important;
+  overflow:visible !important;
+  align-items:center !important;
+}
+#view-settings .section-title-row::before,
+#view-settings .section-title-row::after{
+  display:none !important;
+  content:none !important;
+}
+#view-settings .section-title-row>div{
+  max-width:820px !important;
+}
+#view-settings .section-title-row .eyebrow{
+  margin-bottom:11px !important;
+}
+#view-settings .section-title-row h2{
+  margin:0 0 8px !important;
+  font-size:clamp(38px,3vw,50px) !important;
+  line-height:1.02 !important;
+  letter-spacing:-.045em !important;
+  color:#0b1732 !important;
+  -webkit-text-fill-color:#0b1732 !important;
+}
+#view-settings .section-title-row .muted{
+  max-width:720px !important;
+  font-size:15px !important;
+  line-height:1.55 !important;
+}
+
+/* Grade editorial: duas colunas confortáveis, sem cards estreitos. */
+#view-settings .settings-grid{
+  display:grid !important;
+  grid-template-columns:repeat(12,minmax(0,1fr)) !important;
+  gap:18px !important;
+  align-items:stretch !important;
+}
+#view-settings .settings-grid>.setting-card{
+  min-width:0 !important;
+  border-radius:22px !important;
+  padding:24px 26px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.93),rgba(247,251,255,.80)) !important;
+  border:1px solid rgba(177,201,237,.62) !important;
+  box-shadow:0 16px 38px rgba(50,83,143,.08) !important;
+  backdrop-filter:blur(18px) saturate(135%) !important;
+}
+#view-settings .settings-grid>.setting-card:hover{
+  border-color:rgba(145,181,237,.74) !important;
+}
+
+/* Perfil e nuvem. */
+#view-settings .setting-card:has(#profileNameInput){grid-column:span 6 !important;}
+#view-settings .cloud-card{grid-column:span 6 !important;}
+#view-settings .setting-card:has(#profileNameInput),
+#view-settings .cloud-card{
+  min-height:260px !important;
+}
+#view-settings .compact-form{
+  gap:12px !important;
+}
+#view-settings .compact-form label{
+  gap:7px !important;
+}
+#view-settings .compact-form input{
+  min-height:46px !important;
+}
+#view-settings .cloud-card .setting-actions{
+  margin-top:20px !important;
+  gap:10px !important;
+}
+
+/* Segurança: bloco principal e 4 ações com hierarquia clara. */
+#view-settings .security-card{
+  grid-column:1/-1 !important;
+  padding:26px !important;
+  min-height:0 !important;
+  background:
+    radial-gradient(circle at 94% 5%,rgba(91,146,255,.11),transparent 25%),
+    linear-gradient(145deg,rgba(255,255,255,.95),rgba(245,250,255,.84)) !important;
+}
+#view-settings .security-card>h3{
+  display:flex !important;
+  align-items:center !important;
+  gap:11px !important;
+  margin:0 0 7px !important;
+  font-size:20px !important;
+  color:#0b1732 !important;
+}
+#view-settings .security-card>h3::before{
+  content:"" !important;
+  flex:0 0 38px !important;
+  width:38px !important;
+  height:38px !important;
+  border-radius:11px !important;
+  background:#edf4ff center/21px 21px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23176fff' stroke-width='1.8'%3E%3Cpath d='M12 3 19 6v5c0 5-2.8 8.5-7 10-4.2-1.5-7-5-7-10V6z'/%3E%3Cpath d='m8.8 12 2.1 2.1 4.4-4.6'/%3E%3C/svg%3E") !important;
+  border:1px solid #d6e6ff !important;
+}
+#view-settings .security-card>.muted{
+  margin:0 0 18px !important;
+  line-height:1.55 !important;
+}
+#view-settings .security-list{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:12px !important;
+  margin-top:0 !important;
+}
+#view-settings .security-list>div{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  grid-template-areas:"title action" "status action" !important;
+  align-items:center !important;
+  column-gap:18px !important;
+  row-gap:5px !important;
+  min-height:94px !important;
+  padding:16px 18px !important;
+  border:1px solid rgba(205,220,241,.9) !important;
+  border-radius:16px !important;
+  background:rgba(255,255,255,.70) !important;
+  box-shadow:0 8px 22px rgba(54,82,139,.045) !important;
+}
+#view-settings .security-list>div>strong{
+  grid-area:title !important;
+  display:block !important;
+  min-width:0 !important;
+  font-size:14px !important;
+  line-height:1.35 !important;
+  color:#0b1732 !important;
+}
+#view-settings .security-list>div>span{
+  grid-area:status !important;
+  display:block !important;
+  min-width:0 !important;
+  color:#7183a2 !important;
+  font-size:12.5px !important;
+  line-height:1.4 !important;
+}
+#view-settings .security-list>div>.btn{
+  grid-area:action !important;
+  align-self:center !important;
+  white-space:nowrap !important;
+  min-height:42px !important;
+  padding:10px 15px !important;
+  box-shadow:none !important;
+}
+
+/* Leitura inteligente e IA online: dois cards principais, lado a lado. */
+#view-settings .setting-card:has(.ai-status),
+#view-settings .ai-online-card{
+  grid-column:span 6 !important;
+  min-height:286px !important;
+}
+#view-settings .setting-card:has(.ai-status)>h3,
+#view-settings .ai-online-card>h3,
+#view-settings .setting-card:has(#exportBackup)>h3,
+#view-settings .setting-card:has(#storageInfo)>h3,
+#view-settings .danger-card>h3{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  margin:0 0 8px !important;
+  font-size:19px !important;
+  line-height:1.3 !important;
+  color:#0b1732 !important;
+}
+#view-settings .setting-card:has(.ai-status)>h3::before,
+#view-settings .ai-online-card>h3::before,
+#view-settings .setting-card:has(#exportBackup)>h3::before,
+#view-settings .setting-card:has(#storageInfo)>h3::before,
+#view-settings .danger-card>h3::before{
+  content:"" !important;
+  flex:0 0 36px !important;
+  width:36px !important;
+  height:36px !important;
+  border-radius:10px !important;
+  border:1px solid #dbe8fb !important;
+  background-color:#eef5ff !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
+  background-size:19px 19px !important;
+}
+#view-settings .setting-card:has(.ai-status)>h3::before{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23176fff' stroke-width='1.8'%3E%3Cpath d='m12 3 1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z'/%3E%3Cpath d='m18.5 15 .8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z'/%3E%3C/svg%3E") !important;
+}
+#view-settings .ai-online-card>h3::before{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235d58ef' stroke-width='1.8'%3E%3Cpath d='M12 3v3M12 18v3M3 12h3M18 12h3'/%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Cpath d='m8.5 8.5 7 7M15.5 8.5l-7 7'/%3E%3C/svg%3E") !important;
+}
+#view-settings .setting-card:has(.ai-status)>.muted,
+#view-settings .ai-online-card>.muted{
+  line-height:1.55 !important;
+  min-height:48px !important;
+}
+#view-settings .ai-status{
+  margin-top:18px !important;
+  padding:16px 17px !important;
+  border-radius:16px !important;
+  background:#f7fbff !important;
+}
+#view-settings .ai-status small{
+  line-height:1.45 !important;
+  margin-top:4px !important;
+  color:#617493 !important;
+}
+#view-settings .ai-online-card .consent-row{
+  display:grid !important;
+  grid-template-columns:auto minmax(0,1fr) !important;
+  gap:12px !important;
+  align-items:start !important;
+  margin-top:18px !important;
+  padding:16px 17px !important;
+  border-radius:16px !important;
+  border:1px solid #dbe7f7 !important;
+  background:#f7fbff !important;
+}
+#view-settings .ai-online-card .consent-row input{
+  width:18px !important;
+  height:18px !important;
+  margin:2px 0 0 !important;
+  accent-color:#176fff !important;
+}
+#view-settings .ai-online-card .consent-row strong{
+  display:block !important;
+  margin-bottom:5px !important;
+  color:#0b1732 !important;
+}
+#view-settings .ai-online-card .consent-row small{
+  display:block !important;
+  color:#667a99 !important;
+  font-size:12.5px !important;
+  line-height:1.5 !important;
+}
+#view-settings #aiOnlineStatus{
+  margin:12px 2px 0 !important;
+  color:#6f82a3 !important;
+}
+
+/* Backup e armazenamento: dois cards equivalentes, com ações claras. */
+#view-settings .setting-card:has(#exportBackup),
+#view-settings .setting-card:has(#storageInfo){
+  grid-column:span 6 !important;
+  min-height:220px !important;
+}
+#view-settings .setting-card:has(#exportBackup)>h3::before{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23176fff' stroke-width='1.8'%3E%3Cpath d='M5 4h14v16H5z'/%3E%3Cpath d='M8 4v6h8V4M9 16h6'/%3E%3C/svg%3E") !important;
+}
+#view-settings .setting-card:has(#storageInfo)>h3::before{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23176fff' stroke-width='1.8'%3E%3Cellipse cx='12' cy='6' rx='7' ry='3'/%3E%3Cpath d='M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6'/%3E%3C/svg%3E") !important;
+}
+#view-settings .setting-card:has(#exportBackup)>.muted,
+#view-settings .setting-card:has(#storageInfo)>.muted{
+  line-height:1.55 !important;
+}
+#view-settings .setting-card:has(#exportBackup) .setting-actions{
+  margin-top:20px !important;
+  gap:10px !important;
+}
+#view-settings .setting-card:has(#exportBackup) .btn{
+  min-width:148px !important;
+}
+#view-settings #storageInfo{
+  margin-top:13px !important;
+  padding:15px 17px !important;
+  border-radius:15px !important;
+  border:1px solid #dbe7f7 !important;
+  background:#f7fbff !important;
+  color:#294163 !important;
+  font-weight:750 !important;
+  line-height:1.5 !important;
+}
+
+/* Zona de risco isolada no rodapé, sem competir com recursos normais. */
+#view-settings .danger-card{
+  grid-column:1/-1 !important;
+  min-height:0 !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  grid-template-rows:auto auto !important;
+  align-items:center !important;
+  column-gap:28px !important;
+  row-gap:6px !important;
+  padding:22px 24px !important;
+  background:linear-gradient(145deg,#fffafa,#fff4f5) !important;
+  border-color:#ffd5da !important;
+  box-shadow:0 12px 30px rgba(173,48,67,.06) !important;
+}
+#view-settings .danger-card>h3{
+  grid-column:1 !important;
+  grid-row:1 !important;
+  margin:0 !important;
+  color:#8f2434 !important;
+}
+#view-settings .danger-card>h3::before{
+  border-color:#ffd1d7 !important;
+  background-color:#fff0f2 !important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d5364d' stroke-width='1.8'%3E%3Cpath d='M12 4 21 20H3z'/%3E%3Cpath d='M12 9v5M12 17.3v.2'/%3E%3C/svg%3E") !important;
+}
+#view-settings .danger-card>.muted{
+  grid-column:1 !important;
+  grid-row:2 !important;
+  margin:0 !important;
+  max-width:820px !important;
+  line-height:1.5 !important;
+  color:#8a6470 !important;
+}
+#view-settings .danger-card>#resetVault{
+  grid-column:2 !important;
+  grid-row:1/3 !important;
+  align-self:center !important;
+  min-width:190px !important;
+  min-height:46px !important;
+  margin:0 !important;
+  background:#fff !important;
+  color:#c92c3e !important;
+  border:1px solid #ffbdc6 !important;
+  box-shadow:none !important;
+}
+#view-settings .danger-card>#resetVault:hover{
+  background:#fff0f2 !important;
+  border-color:#f99fac !important;
+}
+
+@media(max-width:1180px){
+  #view-settings .setting-card:has(#profileNameInput),
+  #view-settings .cloud-card,
+  #view-settings .setting-card:has(.ai-status),
+  #view-settings .ai-online-card,
+  #view-settings .setting-card:has(#exportBackup),
+  #view-settings .setting-card:has(#storageInfo){
+    grid-column:1/-1 !important;
+  }
+}
+@media(max-width:760px){
+  #view-settings .section-title-row{min-height:126px !important;padding:22px 0 18px !important;}
+  #view-settings .security-list{grid-template-columns:1fr !important;}
+  #view-settings .security-list>div{grid-template-columns:1fr !important;grid-template-areas:"title" "status" "action" !important;}
+  #view-settings .security-list>div>.btn{justify-self:start !important;margin-top:7px !important;}
+  #view-settings .danger-card{grid-template-columns:1fr !important;}
+  #view-settings .danger-card>h3,
+  #view-settings .danger-card>.muted,
+  #view-settings .danger-card>#resetVault{grid-column:1 !important;grid-row:auto !important;}
+  #view-settings .danger-card>#resetVault{justify-self:start !important;margin-top:10px !important;}
+}
