@@ -15,14 +15,14 @@
     if(!document.querySelector('link[data-mastersafe-final-ui]')){
       const link=document.createElement('link');
       link.rel='stylesheet';
-      link.href='mockup-final.css?v=7.8.3';
+      link.href='mockup-final.css?v=7.8.4';
       link.setAttribute('data-mastersafe-final-ui','1');
       document.head.appendChild(link);
     }
     if(!document.querySelector('link[data-mastersafe-text-fix]')){
       const link=document.createElement('link');
       link.rel='stylesheet';
-      link.href='ui-text-fix.css?v=7.8.3';
+      link.href='ui-text-fix.css?v=7.8.4';
       link.setAttribute('data-mastersafe-text-fix','1');
       document.head.appendChild(link);
     }
@@ -95,8 +95,9 @@
       const h2=$(viewId)?.querySelector('.section-title-row h2');
       if(!h2) return;
       h2.textContent=text;
-      h2.style.setProperty('color','#0b1732','important');
-      h2.style.setProperty('-webkit-text-fill-color','#0b1732','important');
+      const titleColor=(viewId==='view-documents'||viewId==='view-account')?'#000000':'#0b1732';
+      h2.style.setProperty('color',titleColor,'important');
+      h2.style.setProperty('-webkit-text-fill-color',titleColor,'important');
       h2.style.setProperty('background','none','important');
       h2.style.setProperty('background-image','none','important');
       h2.style.setProperty('-webkit-background-clip','border-box','important');
@@ -115,13 +116,13 @@
   function forceCriticalStyles(){
     const h2=$('view-home')?.querySelector('.hero-row h2');
     if(h2){
-      h2.style.setProperty('color','#0b1732','important');
-      h2.style.setProperty('-webkit-text-fill-color','#0b1732','important');
+      h2.style.setProperty('color','#000000','important');
+      h2.style.setProperty('-webkit-text-fill-color','#000000','important');
       h2.style.setProperty('background','none','important');
       const accent=h2.querySelector('.accent-word');
       if(accent){
-        accent.style.setProperty('color','#176fff','important');
-        accent.style.setProperty('-webkit-text-fill-color','#176fff','important');
+        accent.style.setProperty('color','#000000','important');
+        accent.style.setProperty('-webkit-text-fill-color','#000000','important');
       }
     }
     const panel=$('view-home')?.querySelector('.assistant-panel');
