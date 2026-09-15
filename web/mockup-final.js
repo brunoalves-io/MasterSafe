@@ -15,14 +15,14 @@
     if(!document.querySelector('link[data-mastersafe-final-ui]')){
       const link=document.createElement('link');
       link.rel='stylesheet';
-      link.href='mockup-final.css?v=7.8.4';
+      link.href='mockup-final.css?v=7.8.5';
       link.setAttribute('data-mastersafe-final-ui','1');
       document.head.appendChild(link);
     }
     if(!document.querySelector('link[data-mastersafe-text-fix]')){
       const link=document.createElement('link');
       link.rel='stylesheet';
-      link.href='ui-text-fix.css?v=7.8.4';
+      link.href='ui-text-fix.css?v=7.8.5';
       link.setAttribute('data-mastersafe-text-fix','1');
       document.head.appendChild(link);
     }
@@ -77,7 +77,14 @@
     if(!row) return;
     row.querySelectorAll('.concept-hero-art,.exact-hero-art,.final-hero-art').forEach(n=>n.remove());
     const h2=row.querySelector('h2');
-    if(h2) h2.innerHTML='Está tudo no <span class="accent-word">lugar.</span>';
+    if(h2){
+      // Texto simples, sem span de destaque: o título inteiro deve ser preto.
+      h2.textContent='Está tudo no lugar.';
+      h2.style.setProperty('color','#000000','important');
+      h2.style.setProperty('-webkit-text-fill-color','#000000','important');
+      h2.style.setProperty('background','none','important');
+      h2.style.setProperty('background-image','none','important');
+    }
     const art=document.createElement('div');
     art.className='final-hero-art';
     art.innerHTML=heroSvg()+'<div class="final-hero-copy">Mais segurança<br>para o que importa.</div>';
@@ -116,14 +123,11 @@
   function forceCriticalStyles(){
     const h2=$('view-home')?.querySelector('.hero-row h2');
     if(h2){
+      h2.textContent='Está tudo no lugar.';
       h2.style.setProperty('color','#000000','important');
       h2.style.setProperty('-webkit-text-fill-color','#000000','important');
       h2.style.setProperty('background','none','important');
-      const accent=h2.querySelector('.accent-word');
-      if(accent){
-        accent.style.setProperty('color','#000000','important');
-        accent.style.setProperty('-webkit-text-fill-color','#000000','important');
-      }
+      h2.style.setProperty('background-image','none','important');
     }
     const panel=$('view-home')?.querySelector('.assistant-panel');
     if(panel){
