@@ -1,4 +1,4 @@
-/* MasterSafe V7.8 - conta, privacidade, histórico, limites defensivos e carregamento da UI aprovada. */
+/* MasterSafe V7.8.1 - conta, privacidade, histórico, limites defensivos e UI final aprovada. */
 (() => {
   'use strict';
 
@@ -206,19 +206,20 @@
   load('ai.js', 'data-mastersafe-ai');
 })();
 
-/* UI 7.8 aprovada: carregamento explícito para o desktop e Android. */
+/* UI 7.8.1: somente a camada final do mockup. */
 (() => {
-  if (!document.querySelector('link[data-mastersafe-exact-ui]')) {
+  document.querySelectorAll('link[data-mastersafe-exact-ui],script[data-mastersafe-exact-js]').forEach(el => el.remove());
+  if (!document.querySelector('link[data-mastersafe-final-ui]')) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'mockup-exact.css?v=7.8.0';
-    link.setAttribute('data-mastersafe-exact-ui','1');
+    link.href = 'mockup-final.css?v=7.8.1';
+    link.setAttribute('data-mastersafe-final-ui','1');
     document.head.appendChild(link);
   }
-  if (!document.querySelector('script[data-mastersafe-exact-js]')) {
+  if (!document.querySelector('script[data-mastersafe-final-js]')) {
     const script = document.createElement('script');
-    script.src = 'concept-b-enhance.js?v=7.8.0';
-    script.setAttribute('data-mastersafe-exact-js','1');
+    script.src = 'mockup-final.js?v=7.8.1';
+    script.setAttribute('data-mastersafe-final-js','1');
     script.defer = true;
     document.head.appendChild(script);
   }
