@@ -82,11 +82,18 @@
   }
 
   function settingsIcons(){
-    const entries=[['#profileNameInput','◉'],['.cloud-card','☁'],['.security-card','◈'],['.ai-status','✦'],['#exportBackup','▣'],['#storageInfo','▤'],['.danger-card','△']];
+    const entries=[['#profileNameInput','◉'],['.cloud-card','☁'],['.security-card','◈'],['.ai-status','✦'],['#exportBackup','▣'],['#storageInfo','▤']];
     entries.forEach(([sel,ico])=>{
       const node=document.querySelector(sel); const card=node?.closest('.setting-card')||(node?.classList?.contains('setting-card')?node:null); const h3=card?.querySelector('h3');
       if(!h3||h3.dataset.mxIcon) return; h3.dataset.mxIcon='1'; h3.insertAdjacentHTML('afterbegin',`<span style="display:inline-grid;place-items:center;width:30px;height:30px;margin-right:9px;border-radius:9px;background:#edf4ff;color:#3474ef;font-size:14px;vertical-align:middle">${ico}</span>`);
     });
+
+    const dangerTitle=document.querySelector('.danger-card>h3');
+    if(dangerTitle){
+      Array.from(dangerTitle.children).forEach(child=>child.remove());
+      dangerTitle.dataset.mxIcon='danger-clean';
+      dangerTitle.style.setProperty('gap','6px','important');
+    }
   }
 
   function refresh(){
