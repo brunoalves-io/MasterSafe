@@ -1,4 +1,4 @@
-/* MasterSafe 7.8.5 — títulos destacados em preto sólido. */
+/* MasterSafe 7.9.0 — títulos sólidos + refinamento UX da aba Conta. */
 
 /* Títulos principais destacados pelo usuário: preto absoluto, sem gradiente. */
 #view-home .hero-row h2,
@@ -119,4 +119,359 @@
   opacity:1 !important;
   visibility:visible !important;
   -webkit-text-fill-color:currentColor !important;
+}
+
+/* =========================================================
+   CONTA 7.9 — layout mais profissional, compacto e equilibrado
+   ========================================================= */
+#view-account{
+  padding-bottom:36px !important;
+}
+
+/* Cabeçalho mais compacto e sem área morta à direita. */
+#view-account .section-title-row{
+  min-height:176px !important;
+  padding:30px 160px 26px 0 !important;
+  margin:0 !important;
+  overflow:visible !important;
+  align-items:center !important;
+}
+#view-account .section-title-row::before,
+#view-account .section-title-row::after{
+  display:none !important;
+  content:none !important;
+}
+#view-account .section-title-row>div{
+  max-width:860px !important;
+}
+#view-account .section-title-row .eyebrow{
+  margin-bottom:12px !important;
+}
+#view-account .section-title-row h2{
+  font-size:clamp(38px,3vw,52px) !important;
+  line-height:1.03 !important;
+  letter-spacing:-.045em !important;
+  max-width:820px !important;
+}
+#view-account .section-title-row>.badge{
+  position:absolute !important;
+  right:12px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  min-width:92px !important;
+  min-height:40px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:9px 14px !important;
+  border-radius:999px !important;
+  font-weight:850 !important;
+}
+
+/* Grade editorial: plano atual e planos ocupam toda a largura;
+   dados/privacidade ficam à esquerda e histórico à direita. */
+#view-account .account-grid{
+  display:grid !important;
+  grid-template-columns:repeat(12,minmax(0,1fr)) !important;
+  gap:18px !important;
+  align-items:start !important;
+}
+#view-account .account-grid>article:nth-child(1){grid-column:1/-1 !important;}
+#view-account .account-grid>article:nth-child(2){grid-column:1/-1 !important;}
+#view-account .account-grid>article:nth-child(3){grid-column:1/6 !important;grid-row:3 !important;}
+#view-account .account-grid>article:nth-child(4){grid-column:6/-1 !important;grid-row:3 / span 2 !important;}
+#view-account .account-grid>article:nth-child(5){grid-column:1/6 !important;grid-row:4 !important;}
+
+#view-account .account-grid>.panel{
+  border-radius:22px !important;
+  padding:24px 26px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(247,251,255,.78)) !important;
+  border:1px solid rgba(177,201,237,.62) !important;
+  box-shadow:0 16px 38px rgba(50,83,143,.08) !important;
+  backdrop-filter:blur(18px) saturate(135%) !important;
+}
+#view-account .account-grid>.panel:hover{
+  border-color:rgba(143,181,237,.72) !important;
+}
+
+/* Plano atual */
+#view-account .plan-current-card{
+  min-height:168px !important;
+  padding:26px 28px !important;
+  background:
+    radial-gradient(circle at 92% 18%,rgba(86,160,255,.14),transparent 26%),
+    linear-gradient(145deg,rgba(255,255,255,.94),rgba(240,248,255,.82)) !important;
+}
+#view-account .plan-current-card::after{
+  width:270px !important;
+  height:220px !important;
+  opacity:.72 !important;
+}
+#view-account .plan-current-card #accountPlanName{
+  font-size:21px !important;
+  margin:3px 0 0 !important;
+}
+#view-account #accountPlanDescription{
+  max-width:980px !important;
+  line-height:1.55 !important;
+  margin-top:8px !important;
+}
+#view-account .usage-meter{
+  margin-top:22px !important;
+}
+#view-account .usage-meter-head{
+  align-items:center !important;
+  margin-bottom:8px !important;
+}
+#view-account .usage-meter-head>span{
+  color:#405372 !important;
+  font-weight:650 !important;
+}
+#view-account .usage-meter-head strong{
+  color:#0b1732 !important;
+  font-size:13px !important;
+  text-align:right !important;
+}
+#view-account .usage-track{
+  height:8px !important;
+  background:#dce8f7 !important;
+}
+
+/* Bloco de planos: três cards equilibrados em toda a largura. */
+#view-account .account-grid>article:nth-child(2){
+  padding:24px !important;
+}
+#view-account .account-grid>article:nth-child(2) .panel-head{
+  align-items:flex-start !important;
+  margin-bottom:18px !important;
+}
+#view-account .account-grid>article:nth-child(2) .panel-head h3{
+  font-size:21px !important;
+  margin-bottom:4px !important;
+}
+#view-account .zero-cost-grid,
+#view-account .plans-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:16px !important;
+}
+#view-account .plan-card{
+  min-height:238px !important;
+  padding:20px !important;
+  gap:10px !important;
+  border-radius:18px !important;
+  background:linear-gradient(155deg,rgba(255,255,255,.96),rgba(245,249,255,.86)) !important;
+  border:1px solid rgba(164,190,230,.56) !important;
+  box-shadow:0 10px 28px rgba(54,82,139,.06) !important;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease !important;
+}
+#view-account .plan-card:hover{
+  transform:translateY(-2px) !important;
+  border-color:rgba(98,148,242,.58) !important;
+  box-shadow:0 15px 34px rgba(54,82,139,.10) !important;
+}
+#view-account .plan-card.active{
+  border:1.5px solid #4a84ff !important;
+  box-shadow:0 14px 32px rgba(55,110,244,.12),inset 0 0 0 1px rgba(74,132,255,.08) !important;
+}
+#view-account .plan-kicker{
+  min-height:28px !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  color:#1769e8 !important;
+  font-size:10.5px !important;
+  letter-spacing:.14em !important;
+}
+#view-account .plan-card strong{
+  font-size:20px !important;
+  line-height:1.2 !important;
+  min-height:48px !important;
+}
+#view-account .plan-card b{
+  font-size:30px !important;
+  line-height:1.05 !important;
+  color:#194b9f !important;
+  min-height:36px !important;
+}
+#view-account .plan-card small{
+  font-size:12.5px !important;
+  line-height:1.55 !important;
+  color:#6f82a3 !important;
+}
+#view-account .plan-card .btn:disabled{
+  opacity:1 !important;
+  min-height:40px !important;
+  background:#f2f6fb !important;
+  border:1px solid #dce6f4 !important;
+  color:#72839f !important;
+  font-size:12px !important;
+  box-shadow:none !important;
+}
+#view-account .plan-card.active .btn:disabled{
+  background:#edf4ff !important;
+  border-color:#cfe0ff !important;
+  color:#2564d8 !important;
+}
+#view-account .account-grid>article:nth-child(2)>.security-note{
+  margin:14px 2px 0 !important;
+}
+
+/* Dados e privacidade: cards compactos, ações mais fáceis de escanear. */
+#view-account .account-grid>article:nth-child(3),
+#view-account .account-grid>article:nth-child(5){
+  min-height:214px !important;
+}
+#view-account .account-grid>article:nth-child(3) h3,
+#view-account .account-grid>article:nth-child(5) h3,
+#view-account .account-grid>article:nth-child(4) h3{
+  font-size:19px !important;
+  margin:0 0 7px !important;
+}
+#view-account .account-grid>article:nth-child(3) .muted,
+#view-account .account-grid>article:nth-child(5) .muted,
+#view-account .account-grid>article:nth-child(4)>.muted{
+  line-height:1.55 !important;
+}
+#view-account .setting-actions.wrap-actions{
+  gap:10px !important;
+  margin-top:18px !important;
+}
+#view-account .legal-links{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:10px 18px !important;
+  margin:18px 0 !important;
+}
+#view-account .legal-links a{
+  text-decoration:none !important;
+  padding:7px 10px !important;
+  margin-left:-10px !important;
+  border-radius:10px !important;
+  color:#1769e8 !important;
+}
+#view-account .legal-links a:hover{
+  background:#edf4ff !important;
+}
+#view-account #deleteCloudAccountButton{
+  min-height:42px !important;
+}
+
+/* Histórico: elimina as barras cinzas e transforma cada evento em linha clara. */
+#view-account .account-grid>article:nth-child(4){
+  min-height:446px !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+#view-account .security-events{
+  display:grid !important;
+  gap:10px !important;
+  margin:18px 0 !important;
+}
+#view-account .security-event{
+  display:grid !important;
+  grid-template-columns:44px minmax(0,1fr) auto !important;
+  align-items:center !important;
+  gap:12px !important;
+  min-height:74px !important;
+  padding:12px 14px !important;
+  border:1px solid rgba(205,220,241,.82) !important;
+  border-radius:15px !important;
+  background:rgba(255,255,255,.72) !important;
+  box-shadow:none !important;
+}
+#view-account .security-event-icon{
+  width:42px !important;
+  height:42px !important;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:12px !important;
+  background:linear-gradient(145deg,#eef5ff,#e7f0ff) !important;
+  border:1px solid #d7e6fb !important;
+  color:#1769e8 !important;
+  font-size:18px !important;
+  font-weight:800 !important;
+}
+#view-account .security-event-copy{
+  display:grid !important;
+  gap:4px !important;
+  min-width:0 !important;
+}
+#view-account .security-event-copy strong{
+  color:#0b1732 !important;
+  font-size:13.5px !important;
+  line-height:1.3 !important;
+}
+#view-account .security-event-copy small{
+  color:#627695 !important;
+  font-size:12px !important;
+  line-height:1.35 !important;
+}
+#view-account .security-event>small:last-child{
+  color:#8a9ab1 !important;
+  font-size:11px !important;
+  white-space:nowrap !important;
+  align-self:center !important;
+}
+#view-account #refreshSecurityEventsButton{
+  margin-top:auto !important;
+  align-self:flex-start !important;
+}
+
+/* Responsividade da Conta. */
+@media(max-width:1180px){
+  #view-account .section-title-row{
+    padding-right:120px !important;
+  }
+  #view-account .account-grid>article:nth-child(3){grid-column:1/7 !important;}
+  #view-account .account-grid>article:nth-child(4){grid-column:7/-1 !important;}
+  #view-account .account-grid>article:nth-child(5){grid-column:1/7 !important;}
+  #view-account .zero-cost-grid,
+  #view-account .plans-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+}
+@media(max-width:980px){
+  #view-account .section-title-row{
+    min-height:154px !important;
+    padding:24px 0 !important;
+  }
+  #view-account .section-title-row>.badge{
+    position:static !important;
+    transform:none !important;
+    margin-left:14px !important;
+  }
+  #view-account .account-grid{
+    grid-template-columns:1fr !important;
+  }
+  #view-account .account-grid>article:nth-child(n){
+    grid-column:1 !important;
+    grid-row:auto !important;
+  }
+  #view-account .zero-cost-grid,
+  #view-account .plans-grid{
+    grid-template-columns:1fr !important;
+  }
+  #view-account .account-grid>article:nth-child(4){min-height:0 !important;}
+}
+@media(max-width:620px){
+  #view-account .section-title-row{
+    display:block !important;
+  }
+  #view-account .section-title-row>.badge{
+    margin:12px 0 0 !important;
+  }
+  #view-account .account-grid>.panel{
+    padding:19px !important;
+  }
+  #view-account .usage-meter-head{
+    display:grid !important;
+  }
+  #view-account .usage-meter-head strong{
+    text-align:left !important;
+  }
+  #view-account .security-event{
+    grid-template-columns:42px minmax(0,1fr) !important;
+  }
+  #view-account .security-event>small:last-child{
+    grid-column:2 !important;
+  }
 }
