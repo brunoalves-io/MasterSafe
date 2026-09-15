@@ -1,6 +1,6 @@
 'use strict';
 
-/* MasterSafe V7.5 — quota elástica, preços modulares e tema Glass & Gradient. */
+/* MasterSafe V7.6 — quota elástica, preços modulares e interface Concept B aprovada. */
 window.MasterSafeQuota = (() => {
   const MB = 1024 * 1024;
 
@@ -9,22 +9,29 @@ window.MasterSafeQuota = (() => {
       const link = document.createElement('link');
       link.id = 'mastersafe-ui-pro';
       link.rel = 'stylesheet';
-      link.href = 'ui-pro.css?v=750';
+      link.href = 'ui-pro.css?v=760';
       document.head.appendChild(link);
     }
     if (!document.getElementById('mastersafe-ui-polish')) {
       const polish = document.createElement('link');
       polish.id = 'mastersafe-ui-polish';
       polish.rel = 'stylesheet';
-      polish.href = 'ui-polish.css?v=750';
+      polish.href = 'ui-polish.css?v=760';
       document.head.appendChild(polish);
     }
     if (!document.getElementById('mastersafe-concept-b')) {
       const theme = document.createElement('link');
       theme.id = 'mastersafe-concept-b';
       theme.rel = 'stylesheet';
-      theme.href = 'concept-b.css?v=750';
+      theme.href = 'concept-b.css?v=760';
       document.head.appendChild(theme);
+    }
+    if (!document.querySelector('script[data-mastersafe-concept-b]')) {
+      const script = document.createElement('script');
+      script.src = 'concept-b-enhance.js?v=760';
+      script.async = true;
+      script.setAttribute('data-mastersafe-concept-b','1');
+      document.head.appendChild(script);
     }
   }
 
@@ -73,7 +80,7 @@ window.MasterSafeQuota = (() => {
     const description = panel.querySelector('.panel-head .muted');
     const badge = panel.querySelector('#zeroCostBadge');
     if (heading) heading.textContent = 'Planos e recursos';
-    if (description) description.textContent = 'O cofre base continua gratuito. Recursos adicionais podem ter preço próprio, sem alterar a proteção local dos seus documentos.';
+    if (description) description.textContent = 'Escolha os recursos ideais para suas necessidades, mantendo segurança, privacidade e controle sobre os seus dados.';
     if (badge) badge.textContent = 'Base R$ 0';
   }
 
@@ -96,10 +103,10 @@ window.MasterSafeQuota = (() => {
       if (small) {
         const current = Number(info?.limit || 500 * MB);
         const file = Number(info?.displayFileLimit || 25 * MB);
-        small.textContent = `Quota ajustada automaticamente conforme o espaço disponível. Limite atual: ${fmt(current)}; até ${fmt(file)} por arquivo.`;
+        small.textContent = `Guarde seus documentos com segurança na nuvem. Quota atual ${fmt(current)}, com até ${fmt(file)} por arquivo.`;
       }
       const button = quotaCard.querySelector('button');
-      if (button) button.textContent = 'Quota dinâmica ativa';
+      if (button) button.textContent = 'Plano atual';
     }
 
     if (aiCard) {
@@ -107,9 +114,9 @@ window.MasterSafeQuota = (() => {
       aiCard.querySelector('strong')?.replaceChildren(document.createTextNode('IA Híbrida'));
       aiCard.querySelector('b')?.replaceChildren(document.createTextNode('R$ 9,99'));
       const small = aiCard.querySelector('small');
-      if (small) small.textContent = 'OCR e leitura de PDFs acontecem no aparelho. O Pergunte ao Cofre pode usar IA online opcional, sem enviar o arquivo original.';
+      if (small) small.textContent = 'OCR inteligente, leitura de PDFs e Pergunte ao Cofre com processamento local e IA online opcional.';
       const button = aiCard.querySelector('button');
-      if (button) button.textContent = 'Local + online opcional';
+      if (button) button.textContent = 'Em breve';
     }
 
     if (infraCard) {
@@ -119,7 +126,7 @@ window.MasterSafeQuota = (() => {
       const small = infraCard.querySelector('small');
       if (small) small.textContent = 'Publicação, autenticação e sincronização em nuvem com proteção automática de capacidade e continuidade do cofre local.';
       const button = infraCard.querySelector('button');
-      if (button) button.textContent = 'Proteção de custo ativa';
+      if (button) button.textContent = 'Em breve';
     }
 
     const note = document.querySelector('.zero-cost-grid')?.closest('.panel')?.querySelector('.security-note');
