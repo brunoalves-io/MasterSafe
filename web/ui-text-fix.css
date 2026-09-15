@@ -1,8 +1,9 @@
-/* MasterSafe 7.8.4 — correção autoritativa de legibilidade e títulos pretos. */
+/* MasterSafe 7.8.5 — títulos destacados em preto sólido. */
 
-/* Títulos principais destacados pelo usuário: preto sólido, sem gradiente. */
+/* Títulos principais destacados pelo usuário: preto absoluto, sem gradiente. */
 #view-home .hero-row h2,
 #view-home .hero-row h2 *,
+#view-home .hero-row h2 .accent-word,
 #view-documents .section-title-row h2,
 #view-documents .section-title-row h2 *,
 #view-account .section-title-row h2,
