@@ -53,6 +53,8 @@ body { font-size: 15px; }
 
 /* Conta: transforma os blocos inferiores em uma composição equilibrada. */
 #view-account .section-title-row .muted { max-width: 760px; }
+/* Informação redundante no cabeçalho da Conta. */
+#accountPlanBadge { display: none !important; }
 .account-grid {
   grid-template-columns: minmax(350px, .86fr) minmax(0, 1.14fr);
   grid-template-areas:
