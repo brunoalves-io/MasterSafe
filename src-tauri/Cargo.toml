@@ -1,6 +1,6 @@
 [package]
 name = "mastersafe"
-version = "7.10.2"
+version = "7.10.3"
 description = "MasterSafe - cofre pessoal criptografado"
 authors = ["MasterSafe"]
 edition = "2021"
