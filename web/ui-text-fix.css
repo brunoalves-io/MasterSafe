@@ -1,0 +1,107 @@
+/* MasterSafe 7.8.3 — correção autoritativa de legibilidade nas telas Conta e Documentos. */
+
+/* Títulos principais: neutraliza gradientes/clip herdados de protótipos antigos. */
+#view-documents .section-title-row h2,
+#view-account .section-title-row h2,
+#view-radar .section-title-row h2,
+#view-settings .section-title-row h2 {
+  display:block !important;
+  width:auto !important;
+  max-width:100% !important;
+  margin:0 0 10px !important;
+  color:#0b1732 !important;
+  -webkit-text-fill-color:#0b1732 !important;
+  background:none !important;
+  background-image:none !important;
+  -webkit-background-clip:border-box !important;
+  background-clip:border-box !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  filter:none !important;
+  text-shadow:none !important;
+  white-space:normal !important;
+  word-break:normal !important;
+}
+
+#view-documents .section-title-row h2 *,
+#view-account .section-title-row h2 *,
+#view-radar .section-title-row h2 *,
+#view-settings .section-title-row h2 * {
+  color:#0b1732 !important;
+  -webkit-text-fill-color:#0b1732 !important;
+  background:none !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+/* Garante leitura dos textos da tela Conta. */
+#view-account .panel,
+#view-account .panel *,
+#view-account .plan-card,
+#view-account .plan-card * {
+  opacity:1;
+  visibility:visible;
+}
+
+#view-account .plan-current-card h3,
+#view-account .plan-current-card strong,
+#view-account .plan-card strong,
+#view-account .plan-card b,
+#view-account .panel h3 {
+  color:#0b1732 !important;
+  -webkit-text-fill-color:#0b1732 !important;
+  background:none !important;
+}
+
+#view-account .muted,
+#view-account .plan-card small,
+#view-account .security-note {
+  color:#6f82a3 !important;
+  -webkit-text-fill-color:#6f82a3 !important;
+}
+
+#view-account #accountPlanBadge,
+#view-account #accountCloudBadge,
+#view-account #zeroCostBadge {
+  opacity:1 !important;
+  visibility:visible !important;
+  filter:none !important;
+  -webkit-text-fill-color:currentColor !important;
+}
+
+#view-account #accountCloudBadge.badge-safe,
+#view-account #accountPlanBadge.badge-safe,
+#view-account #zeroCostBadge.badge-safe {
+  color:#087a55 !important;
+  background:#dff8ec !important;
+  border-color:#bcebd6 !important;
+}
+
+/* Garante leitura dos cards na tela Documentos. */
+#view-documents .document-card,
+#view-documents .document-card * {
+  opacity:1;
+  visibility:visible;
+}
+
+#view-documents .document-card h3,
+#view-documents .document-card strong,
+#view-documents .concept-doc-copy h3 {
+  color:#0b1732 !important;
+  -webkit-text-fill-color:#0b1732 !important;
+  background:none !important;
+}
+
+#view-documents .document-card small,
+#view-documents .document-card .muted,
+#view-documents .concept-doc-copy p {
+  color:#6f82a3 !important;
+  -webkit-text-fill-color:#6f82a3 !important;
+}
+
+#view-documents .badge,
+#view-documents .concept-doc-status {
+  opacity:1 !important;
+  visibility:visible !important;
+  -webkit-text-fill-color:currentColor !important;
+}
