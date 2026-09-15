@@ -1,4 +1,4 @@
-/* MasterSafe V7.8.1 - conta, privacidade, histórico, limites defensivos e UI final aprovada. */
+/* MasterSafe V7.10.3 - conta, privacidade, histórico, limites defensivos e UI final aprovada. */
 (() => {
   'use strict';
 
@@ -83,11 +83,15 @@
 
     if ($('accountPlanName')) $('accountPlanName').textContent = connected ? 'Zero Custo Cloud' : 'Local';
     if ($('accountPlanBadge')) {
-      $('accountPlanBadge').textContent = connected ? 'Beta R$ 0' : 'Plano local';
-      $('accountPlanBadge').className = `badge ${connected ? 'badge-safe' : 'badge-neutral'}`;
+      $('accountPlanBadge').hidden = true;
+      $('accountPlanBadge').style.display = 'none';
+    }
+    if ($('zeroCostBadge')) {
+      $('zeroCostBadge').hidden = true;
+      $('zeroCostBadge').style.display = 'none';
     }
     if ($('accountCloudBadge')) {
-      $('accountCloudBadge').textContent = connected ? 'Nuvem grátis ativa' : 'Sem conta';
+      $('accountCloudBadge').textContent = connected ? 'Free' : 'Sem conta';
       $('accountCloudBadge').className = `badge ${connected ? 'badge-safe' : 'badge-neutral'}`;
     }
     if ($('accountPlanDescription')) $('accountPlanDescription').textContent = connected
@@ -206,19 +210,19 @@
   load('ai.js', 'data-mastersafe-ai');
 })();
 
-/* UI 7.8.1: somente a camada final do mockup. */
+/* UI 7.10.3: somente a camada final do mockup. */
 (() => {
   document.querySelectorAll('link[data-mastersafe-exact-ui],script[data-mastersafe-exact-js]').forEach(el => el.remove());
   if (!document.querySelector('link[data-mastersafe-final-ui]')) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'mockup-final.css?v=7.8.1';
+    link.href = 'mockup-final.css?v=7.10.3';
     link.setAttribute('data-mastersafe-final-ui','1');
     document.head.appendChild(link);
   }
   if (!document.querySelector('script[data-mastersafe-final-js]')) {
     const script = document.createElement('script');
-    script.src = 'mockup-final.js?v=7.8.1';
+    script.src = 'mockup-final.js?v=7.10.3';
     script.setAttribute('data-mastersafe-final-js','1');
     script.defer = true;
     document.head.appendChild(script);
