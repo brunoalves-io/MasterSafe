@@ -15,21 +15,21 @@
     if(!document.querySelector('link[data-mastersafe-final-ui]')){
       const link=document.createElement('link');
       link.rel='stylesheet';
-      link.href='mockup-final.css?v=7.10.0';
+      link.href='mockup-final.css?v=7.10.3';
       link.setAttribute('data-mastersafe-final-ui','1');
       document.head.appendChild(link);
     }
     if(!document.querySelector('link[data-mastersafe-text-fix]')){
       const link=document.createElement('link');
       link.rel='stylesheet';
-      link.href='ui-text-fix.css?v=7.10.0';
+      link.href='ui-text-fix.css?v=7.10.3';
       link.setAttribute('data-mastersafe-text-fix','1');
       document.head.appendChild(link);
     }
     if(!document.querySelector('link[data-mastersafe-settings-ux]')){
       const link=document.createElement('link');
       link.rel='stylesheet';
-      link.href='settings-ux.css?v=7.10.0';
+      link.href='settings-ux.css?v=7.10.3';
       link.setAttribute('data-mastersafe-settings-ux','1');
       document.head.appendChild(link);
     }
@@ -152,13 +152,18 @@
       panel.style.setProperty('border','1px solid rgba(183,205,239,.66)','important');
       panel.style.setProperty('box-shadow','0 18px 44px rgba(48,86,151,.10), inset 0 1px rgba(255,255,255,.98)','important');
     }
-    ['accountPlanBadge','accountCloudBadge','zeroCostBadge'].forEach(id=>{
+    ['accountPlanBadge','zeroCostBadge'].forEach(id=>{
       const el=$(id);
       if(!el) return;
-      el.style.setProperty('opacity','1','important');
-      el.style.setProperty('visibility','visible','important');
-      el.style.setProperty('-webkit-text-fill-color','currentColor','important');
+      el.hidden=true;
+      el.style.setProperty('display','none','important');
     });
+    const cloudBadge=$('accountCloudBadge');
+    if(cloudBadge){
+      cloudBadge.style.setProperty('opacity','1','important');
+      cloudBadge.style.setProperty('visibility','visible','important');
+      cloudBadge.style.setProperty('-webkit-text-fill-color','currentColor','important');
+    }
   }
 
   function refresh(){
