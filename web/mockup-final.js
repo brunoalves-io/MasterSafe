@@ -15,15 +15,22 @@
     if(!document.querySelector('link[data-mastersafe-final-ui]')){
       const link=document.createElement('link');
       link.rel='stylesheet';
-      link.href='mockup-final.css?v=7.8.5';
+      link.href='mockup-final.css?v=7.10.0';
       link.setAttribute('data-mastersafe-final-ui','1');
       document.head.appendChild(link);
     }
     if(!document.querySelector('link[data-mastersafe-text-fix]')){
       const link=document.createElement('link');
       link.rel='stylesheet';
-      link.href='ui-text-fix.css?v=7.8.5';
+      link.href='ui-text-fix.css?v=7.10.0';
       link.setAttribute('data-mastersafe-text-fix','1');
+      document.head.appendChild(link);
+    }
+    if(!document.querySelector('link[data-mastersafe-settings-ux]')){
+      const link=document.createElement('link');
+      link.rel='stylesheet';
+      link.href='settings-ux.css?v=7.10.0';
+      link.setAttribute('data-mastersafe-settings-ux','1');
       document.head.appendChild(link);
     }
   }
@@ -78,7 +85,6 @@
     row.querySelectorAll('.concept-hero-art,.exact-hero-art,.final-hero-art').forEach(n=>n.remove());
     const h2=row.querySelector('h2');
     if(h2){
-      // Texto simples, sem span de destaque: o título inteiro deve ser preto.
       h2.textContent='Está tudo no lugar.';
       h2.style.setProperty('color','#000000','important');
       h2.style.setProperty('-webkit-text-fill-color','#000000','important');
@@ -112,6 +118,17 @@
       h2.style.setProperty('opacity','1','important');
       h2.style.setProperty('visibility','visible','important');
     });
+  }
+
+  function normalizeSettingsCopy(){
+    const view=$('view-settings');
+    if(!view) return;
+    const securityTitle=view.querySelector('.security-card>h3');
+    if(securityTitle) securityTitle.textContent='Segurança da conta';
+    const cloudTitle=view.querySelector('.cloud-card h3');
+    if(cloudTitle) cloudTitle.textContent='Nuvem segura';
+    const sectionSubtitle=view.querySelector('.section-title-row .muted');
+    if(sectionSubtitle) sectionSubtitle.textContent='Segurança, inteligência, backup e armazenamento do seu cofre.';
   }
 
   function stripPrototypeArtifacts(){
@@ -150,6 +167,7 @@
     singleBell();
     homeHero();
     normalizeSectionTitles();
+    normalizeSettingsCopy();
     stripPrototypeArtifacts();
     forceCriticalStyles();
   }
