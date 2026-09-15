@@ -1,6 +1,25 @@
-/* MasterSafe 7.8.3 — correção autoritativa de legibilidade nas telas Conta e Documentos. */
+/* MasterSafe 7.8.4 — correção autoritativa de legibilidade e títulos pretos. */
 
-/* Títulos principais: neutraliza gradientes/clip herdados de protótipos antigos. */
+/* Títulos principais destacados pelo usuário: preto sólido, sem gradiente. */
+#view-home .hero-row h2,
+#view-home .hero-row h2 *,
+#view-documents .section-title-row h2,
+#view-documents .section-title-row h2 *,
+#view-account .section-title-row h2,
+#view-account .section-title-row h2 * {
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  background:none !important;
+  background-image:none !important;
+  -webkit-background-clip:border-box !important;
+  background-clip:border-box !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  filter:none !important;
+  text-shadow:none !important;
+}
+
+/* Demais títulos de seção continuam sólidos e legíveis. */
 #view-documents .section-title-row h2,
 #view-account .section-title-row h2,
 #view-radar .section-title-row h2,
@@ -9,6 +28,14 @@
   width:auto !important;
   max-width:100% !important;
   margin:0 0 10px !important;
+  white-space:normal !important;
+  word-break:normal !important;
+}
+
+#view-radar .section-title-row h2,
+#view-settings .section-title-row h2,
+#view-radar .section-title-row h2 *,
+#view-settings .section-title-row h2 * {
   color:#0b1732 !important;
   -webkit-text-fill-color:#0b1732 !important;
   background:none !important;
@@ -19,19 +46,6 @@
   visibility:visible !important;
   filter:none !important;
   text-shadow:none !important;
-  white-space:normal !important;
-  word-break:normal !important;
-}
-
-#view-documents .section-title-row h2 *,
-#view-account .section-title-row h2 *,
-#view-radar .section-title-row h2 *,
-#view-settings .section-title-row h2 * {
-  color:#0b1732 !important;
-  -webkit-text-fill-color:#0b1732 !important;
-  background:none !important;
-  opacity:1 !important;
-  visibility:visible !important;
 }
 
 /* Garante leitura dos textos da tela Conta. */
