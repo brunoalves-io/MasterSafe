@@ -1,4 +1,4 @@
-/* MasterSafe V7.3.2 - conta, privacidade, histórico e limites defensivos do beta. */
+/* MasterSafe V7.8 - conta, privacidade, histórico, limites defensivos e carregamento da UI aprovada. */
 (() => {
   'use strict';
 
@@ -192,7 +192,7 @@
   wire();
 })();
 
-/* MasterSafe V7.3.2: carrega módulos opcionais sem alterar o núcleo do cofre. */
+/* Módulos opcionais */
 (() => {
   const load = (src, marker) => {
     if (document.querySelector(`script[${marker}]`)) return;
@@ -204,4 +204,22 @@
   };
   load('quota.js', 'data-mastersafe-quota');
   load('ai.js', 'data-mastersafe-ai');
+})();
+
+/* UI 7.8 aprovada: carregamento explícito para o desktop e Android. */
+(() => {
+  if (!document.querySelector('link[data-mastersafe-exact-ui]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'mockup-exact.css?v=7.8.0';
+    link.setAttribute('data-mastersafe-exact-ui','1');
+    document.head.appendChild(link);
+  }
+  if (!document.querySelector('script[data-mastersafe-exact-js]')) {
+    const script = document.createElement('script');
+    script.src = 'concept-b-enhance.js?v=7.8.0';
+    script.setAttribute('data-mastersafe-exact-js','1');
+    script.defer = true;
+    document.head.appendChild(script);
+  }
 })();
