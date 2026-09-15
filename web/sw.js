@@ -1,6 +1,6 @@
-const CACHE = 'mastersafe-v7-8-2-startup-fix';
+const CACHE = 'mastersafe-v7-8-3-text-fix';
 const FILES = [
-  './','./index.html','./share.html','./styles.css','./ui-pro.css','./ui-polish.css','./concept-b.css','./concept-b-enhance.js','./mockup-exact.css','./mockup-final.css','./mockup-final.js','./app.js','./smart.js','./cloud-config.js','./cloud.js','./quota.js','./ai.js','./beta.js','./privacidade.html','./termos.html','./manifest.json','./assets/icon.svg'
+  './','./index.html','./share.html','./styles.css','./ui-pro.css','./ui-polish.css','./concept-b.css','./concept-b-enhance.js','./mockup-exact.css','./mockup-final.css','./ui-text-fix.css','./mockup-final.js','./app.js','./smart.js','./cloud-config.js','./cloud.js','./quota.js','./ai.js','./beta.js','./privacidade.html','./termos.html','./manifest.json','./assets/icon.svg'
 ];
 self.addEventListener('install', event => event.waitUntil((async()=>{
   await caches.open(CACHE).then(cache => cache.addAll(FILES));
