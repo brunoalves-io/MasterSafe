@@ -1,4 +1,4 @@
-const CACHE = 'mastersafe-v7-6-approved-concept-b';
+const CACHE = 'mastersafe-v7-7-final-mockup-ui';
 const FILES = [
   './','./index.html','./share.html','./styles.css','./ui-pro.css','./ui-polish.css','./concept-b.css','./concept-b-enhance.js','./app.js','./smart.js','./cloud-config.js','./cloud.js','./quota.js','./ai.js','./beta.js','./privacidade.html','./termos.html','./manifest.json','./assets/icon.svg'
 ];
