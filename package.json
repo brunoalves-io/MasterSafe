@@ -1,7 +1,7 @@
 {
   "name": "mastersafe-native",
   "private": true,
-  "version": "7.8.2",
+  "version": "7.8.3",
   "description": "MasterSafe Desktop e Android com UI fiel aos mockups aprovados, IA híbrida, quota elástica e planos modulares",
   "scripts": {
     "tauri": "tauri",
