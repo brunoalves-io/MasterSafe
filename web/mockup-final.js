@@ -11,14 +11,12 @@
     bell:'<svg viewBox="0 0 24 24"><path d="M6.5 9.5a5.5 5.5 0 0 1 11 0c0 6 2.5 6 2.5 7.5H4c0-1.5 2.5-1.5 2.5-7.5Z"/><path d="M9.5 20h5"/></svg>'
   };
 
-  function keepFinalCssLast(){
-    let link=document.querySelector('link[data-mastersafe-final-ui]');
-    if(!link){
-      link=document.createElement('link');
-      link.rel='stylesheet';
-      link.href='mockup-final.css?v=7.8.1';
-      link.setAttribute('data-mastersafe-final-ui','1');
-    }
+  function ensureFinalCss(){
+    if(document.querySelector('link[data-mastersafe-final-ui]')) return;
+    const link=document.createElement('link');
+    link.rel='stylesheet';
+    link.href='mockup-final.css?v=7.8.2';
+    link.setAttribute('data-mastersafe-final-ui','1');
     document.head.appendChild(link);
   }
 
@@ -36,7 +34,10 @@
     const add=$('addDocumentTop');
     if(!top||!add) return;
     const bell=document.createElement('button');
-    bell.type='button'; bell.className='final-bell'; bell.title='Notificações'; bell.setAttribute('aria-label','Notificações');
+    bell.type='button';
+    bell.className='final-bell';
+    bell.title='Notificações';
+    bell.setAttribute('aria-label','Notificações');
     bell.innerHTML=ICONS.bell;
     bell.addEventListener('click',()=>document.querySelector('.nav-item[data-view="radar"]')?.click());
     top.insertBefore(bell,add);
@@ -88,7 +89,10 @@
       h2.style.setProperty('-webkit-text-fill-color','#0b1732','important');
       h2.style.setProperty('background','none','important');
       const accent=h2.querySelector('.accent-word');
-      if(accent){accent.style.setProperty('color','#176fff','important');accent.style.setProperty('-webkit-text-fill-color','#176fff','important');}
+      if(accent){
+        accent.style.setProperty('color','#176fff','important');
+        accent.style.setProperty('-webkit-text-fill-color','#176fff','important');
+      }
     }
     const panel=$('view-home')?.querySelector('.assistant-panel');
     if(panel){
@@ -99,7 +103,7 @@
   }
 
   function refresh(){
-    keepFinalCssLast();
+    ensureFinalCss();
     navIcons();
     singleBell();
     homeHero();
@@ -107,11 +111,14 @@
     forceCriticalStyles();
   }
 
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',refresh,{once:true}); else refresh();
-  setTimeout(refresh,120); setTimeout(refresh,500); setTimeout(refresh,1200);
+  if(document.readyState==='loading') {
+    document.addEventListener('DOMContentLoaded',refresh,{once:true});
+  } else {
+    refresh();
+  }
 
-  new MutationObserver(()=>{
-    keepFinalCssLast();
-    forceCriticalStyles();
-  }).observe(document.head,{childList:true});
+  // Uma segunda passagem curta cobre elementos adicionados depois por módulos opcionais.
+  // Não observamos o <head>: mover a própria folha de estilo dentro de um MutationObserver
+  // criava um ciclo infinito e impedia o app de concluir a inicialização.
+  setTimeout(refresh,700);
 })();
