@@ -163,11 +163,11 @@ window.MasterSafeAI = (() => {
     const grid = document.querySelector('.settings-grid');
     if (!grid || $('aiOnlineToggle')) return;
     const card = document.createElement('article');
-    card.className = 'panel setting-card';
+    card.className = 'panel setting-card ai-online-card';
     card.innerHTML = `
-      <h3>✦ IA online opcional</h3>
-      <p class="muted">Transforma “Pergunte ao Cofre” em um assistente de IA. A chave da API fica protegida no servidor, nunca no EXE ou APK.</p>
-      <label class="consent-row"><input id="aiOnlineToggle" type="checkbox" /> <span><strong>Usar IA online (Groq Free)</strong><br><small>Ao perguntar, o MasterSafe envia somente até 3 trechos relevantes e parcialmente mascarados. O arquivo original não é enviado. Os trechos ainda podem conter nomes ou outros dados não detectados pela máscara.</small></span></label>
+      <h3>IA online opcional</h3>
+      <p class="muted">Ative somente quando quiser respostas assistidas por IA no “Pergunte ao Cofre”. A chave da API permanece protegida no servidor.</p>
+      <label class="consent-row"><input id="aiOnlineToggle" type="checkbox" /> <span><strong>Usar IA online (Groq Free)</strong><small>São enviados no máximo 3 trechos relevantes e parcialmente mascarados. O arquivo original nunca é enviado.</small></span></label>
       <p id="aiOnlineStatus" class="security-note"></p>`;
     const backupCard = [...grid.querySelectorAll('.setting-card')].find(el => el.querySelector('h3')?.textContent?.includes('Backup criptografado'));
     if (backupCard) grid.insertBefore(card, backupCard); else grid.appendChild(card);
@@ -192,7 +192,7 @@ window.MasterSafeAI = (() => {
     const mode = $('vaultAssistantMode');
     if (toggle) toggle.checked = enabled;
     if (status) status.textContent = enabled
-      ? 'Ativada. O arquivo original nunca é enviado; somente trechos relevantes e parcialmente mascarados passam pela função segura.'
+      ? 'Ativada. Somente os trechos selecionados passam pela função segura; o arquivo original permanece no dispositivo.'
       : 'Desativada. O Pergunte ao Cofre usa apenas a busca local privada.';
     if (mode) mode.textContent = enabled ? 'IA online opcional · Groq' : 'Busca local privada';
   }
