@@ -12,12 +12,20 @@
   };
 
   function ensureFinalCss(){
-    if(document.querySelector('link[data-mastersafe-final-ui]')) return;
-    const link=document.createElement('link');
-    link.rel='stylesheet';
-    link.href='mockup-final.css?v=7.8.2';
-    link.setAttribute('data-mastersafe-final-ui','1');
-    document.head.appendChild(link);
+    if(!document.querySelector('link[data-mastersafe-final-ui]')){
+      const link=document.createElement('link');
+      link.rel='stylesheet';
+      link.href='mockup-final.css?v=7.8.3';
+      link.setAttribute('data-mastersafe-final-ui','1');
+      document.head.appendChild(link);
+    }
+    if(!document.querySelector('link[data-mastersafe-text-fix]')){
+      const link=document.createElement('link');
+      link.rel='stylesheet';
+      link.href='ui-text-fix.css?v=7.8.3';
+      link.setAttribute('data-mastersafe-text-fix','1');
+      document.head.appendChild(link);
+    }
   }
 
   function navIcons(){
@@ -76,6 +84,28 @@
     row.appendChild(art);
   }
 
+  function normalizeSectionTitles(){
+    const titles={
+      'view-documents':'Seus documentos',
+      'view-radar':'Radar',
+      'view-account':'Seu Cofre, sob seu controle',
+      'view-settings':'Configurações'
+    };
+    Object.entries(titles).forEach(([viewId,text])=>{
+      const h2=$(viewId)?.querySelector('.section-title-row h2');
+      if(!h2) return;
+      h2.textContent=text;
+      h2.style.setProperty('color','#0b1732','important');
+      h2.style.setProperty('-webkit-text-fill-color','#0b1732','important');
+      h2.style.setProperty('background','none','important');
+      h2.style.setProperty('background-image','none','important');
+      h2.style.setProperty('-webkit-background-clip','border-box','important');
+      h2.style.setProperty('background-clip','border-box','important');
+      h2.style.setProperty('opacity','1','important');
+      h2.style.setProperty('visibility','visible','important');
+    });
+  }
+
   function stripPrototypeArtifacts(){
     document.querySelectorAll('.concept-private,.concept-stat-note,.concept-hero-art,.exact-hero-art').forEach(n=>n.remove());
     const mode=$('vaultAssistantMode');
@@ -100,6 +130,13 @@
       panel.style.setProperty('border','1px solid rgba(183,205,239,.66)','important');
       panel.style.setProperty('box-shadow','0 18px 44px rgba(48,86,151,.10), inset 0 1px rgba(255,255,255,.98)','important');
     }
+    ['accountPlanBadge','accountCloudBadge','zeroCostBadge'].forEach(id=>{
+      const el=$(id);
+      if(!el) return;
+      el.style.setProperty('opacity','1','important');
+      el.style.setProperty('visibility','visible','important');
+      el.style.setProperty('-webkit-text-fill-color','currentColor','important');
+    });
   }
 
   function refresh(){
@@ -107,6 +144,7 @@
     navIcons();
     singleBell();
     homeHero();
+    normalizeSectionTitles();
     stripPrototypeArtifacts();
     forceCriticalStyles();
   }
@@ -117,8 +155,5 @@
     refresh();
   }
 
-  // Uma segunda passagem curta cobre elementos adicionados depois por módulos opcionais.
-  // Não observamos o <head>: mover a própria folha de estilo dentro de um MutationObserver
-  // criava um ciclo infinito e impedia o app de concluir a inicialização.
   setTimeout(refresh,700);
 })();
