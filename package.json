@@ -1,8 +1,8 @@
 {
   "name": "mastersafe-native",
   "private": true,
-  "version": "7.6.0",
-  "description": "MasterSafe Desktop e Android com interface Glass & Gradient aprovada, IA híbrida, quota elástica e planos modulares",
+  "version": "7.7.0",
+  "description": "MasterSafe Desktop e Android com interface fiel aos mockups aprovados, IA híbrida, quota elástica e planos modulares",
   "scripts": {
     "tauri": "tauri",
     "desktop:dev": "tauri dev",
