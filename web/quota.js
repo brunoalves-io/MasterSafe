@@ -1,6 +1,6 @@
 'use strict';
 
-/* MasterSafe V7.4.1 — quota elástica, preços modulares e refinamento profissional. */
+/* MasterSafe V7.5 — quota elástica, preços modulares e tema Glass & Gradient. */
 window.MasterSafeQuota = (() => {
   const MB = 1024 * 1024;
 
@@ -9,15 +9,22 @@ window.MasterSafeQuota = (() => {
       const link = document.createElement('link');
       link.id = 'mastersafe-ui-pro';
       link.rel = 'stylesheet';
-      link.href = 'ui-pro.css?v=741';
+      link.href = 'ui-pro.css?v=750';
       document.head.appendChild(link);
     }
     if (!document.getElementById('mastersafe-ui-polish')) {
       const polish = document.createElement('link');
       polish.id = 'mastersafe-ui-polish';
       polish.rel = 'stylesheet';
-      polish.href = 'ui-polish.css?v=741';
+      polish.href = 'ui-polish.css?v=750';
       document.head.appendChild(polish);
+    }
+    if (!document.getElementById('mastersafe-concept-b')) {
+      const theme = document.createElement('link');
+      theme.id = 'mastersafe-concept-b';
+      theme.rel = 'stylesheet';
+      theme.href = 'concept-b.css?v=750';
+      document.head.appendChild(theme);
     }
   }
 
