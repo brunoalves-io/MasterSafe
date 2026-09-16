@@ -1,4 +1,4 @@
-/* MasterSafe 7.10.9 — limpeza visual de ícones decorativos. */
+/* MasterSafe 7.10.10 — limpeza visual de ícones decorativos e marca lateral. */
 
 /* Esconde pseudo-ícones dos títulos indicados. */
 #view-settings .setting-card:has(#profileNameInput) > h3::before,
@@ -64,4 +64,27 @@
   letter-spacing: 0.12em;
   text-transform: none !important;
   color: #1769e8;
+}
+
+/* Marca da sidebar: usa exatamente o mesmo ícone-base do aplicativo desktop. */
+#appShell .brand-icon {
+  width: 56px !important;
+  height: 56px !important;
+  flex: 0 0 56px !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  font-size: 0 !important;
+  color: transparent !important;
+  background: url('assets/icon.svg') center center / 100% 100% no-repeat !important;
+  box-shadow: none !important;
+}
+
+#appShell .brand-icon > *,
+#appShell .brand-icon::before,
+#appShell .brand-icon::after {
+  display: none !important;
+  content: none !important;
 }
