@@ -1,4 +1,4 @@
-/* MasterSafe V7.10.3 - conta, privacidade, histórico, limites defensivos e UI final aprovada. */
+/* MasterSafe V7.10.7 - conta, privacidade, histórico, limites defensivos e UI final aprovada. */
 (() => {
   'use strict';
 
@@ -210,19 +210,26 @@
   load('ai.js', 'data-mastersafe-ai');
 })();
 
-/* UI 7.10.3: somente a camada final do mockup. */
+/* UI 7.10.7: camada final + limpeza dos ícones decorativos em Configurações. */
 (() => {
   document.querySelectorAll('link[data-mastersafe-exact-ui],script[data-mastersafe-exact-js]').forEach(el => el.remove());
   if (!document.querySelector('link[data-mastersafe-final-ui]')) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'mockup-final.css?v=7.10.3';
+    link.href = 'mockup-final.css?v=7.10.7';
     link.setAttribute('data-mastersafe-final-ui','1');
+    document.head.appendChild(link);
+  }
+  if (!document.querySelector('link[data-mastersafe-settings-title-clean]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'settings-title-icons-clean.css?v=7.10.7';
+    link.setAttribute('data-mastersafe-settings-title-clean','1');
     document.head.appendChild(link);
   }
   if (!document.querySelector('script[data-mastersafe-final-js]')) {
     const script = document.createElement('script');
-    script.src = 'mockup-final.js?v=7.10.3';
+    script.src = 'mockup-final.js?v=7.10.7';
     script.setAttribute('data-mastersafe-final-js','1');
     script.defer = true;
     document.head.appendChild(script);
