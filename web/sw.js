@@ -1,6 +1,6 @@
-const CACHE = 'mastersafe-v7-10-6-centered-brand-lock';
+const CACHE = 'mastersafe-v7-10-7-settings-icons-clean';
 const FILES = [
-  './','./index.html','./share.html','./styles.css','./ui-pro.css','./ui-polish.css','./concept-b.css','./concept-b-enhance.js','./mockup-exact.css','./mockup-final.css','./ui-text-fix.css','./settings-ux.css','./mockup-final.js','./app.js','./smart.js','./cloud-config.js','./cloud.js','./quota.js','./ai.js','./beta.js','./privacidade.html','./termos.html','./manifest.json','./assets/icon.svg'
+  './','./index.html','./share.html','./styles.css','./ui-pro.css','./ui-polish.css','./concept-b.css','./concept-b-enhance.js','./mockup-exact.css','./mockup-final.css','./ui-text-fix.css','./settings-ux.css','./settings-title-icons-clean.css','./mockup-final.js','./app.js','./smart.js','./cloud-config.js','./cloud.js','./quota.js','./ai.js','./beta.js','./privacidade.html','./termos.html','./manifest.json','./assets/icon.svg'
 ];
 self.addEventListener('install', event => event.waitUntil((async()=>{
   await caches.open(CACHE).then(cache => cache.addAll(FILES));
