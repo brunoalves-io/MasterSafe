@@ -29,6 +29,28 @@
     });
   }
 
+  function centerBrandLock(){
+    const icon=document.querySelector('#appShell .brand-icon');
+    if(!icon) return;
+    icon.innerHTML=`<svg viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="8" y="14" width="16" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/>
+      <path d="M11 14v-4a5 5 0 0 1 10 0v4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>`;
+    icon.style.setProperty('display','grid','important');
+    icon.style.setProperty('place-items','center','important');
+    icon.style.setProperty('padding','0','important');
+    icon.style.setProperty('line-height','1','important');
+    icon.style.setProperty('text-align','center','important');
+    const svg=icon.querySelector('svg');
+    if(svg){
+      svg.style.setProperty('width','29px','important');
+      svg.style.setProperty('height','29px','important');
+      svg.style.setProperty('display','block','important');
+      svg.style.setProperty('color','#ffffff','important');
+      svg.style.setProperty('transform','translate(0,0)','important');
+    }
+  }
+
   function singleBell(){
     document.querySelectorAll('.concept-bell,.exact-bell').forEach(n=>n.remove());
     const top=document.querySelector('.topbar');
@@ -107,7 +129,7 @@
   }
 
   function refresh(){
-    ensureExactCss(); navIcons(); singleBell(); cleanOldEnhancements(); accentTitles();
+    ensureExactCss(); navIcons(); centerBrandLock(); singleBell(); cleanOldEnhancements(); accentTitles();
     heroArt('view-home','Mais segurança<br>para o que importa.');
     heroArt('view-documents','Organize hoje<br>um amanhã mais tranquilo.');
     heroArt('view-account','Mais segurança<br>para o que importa.');
