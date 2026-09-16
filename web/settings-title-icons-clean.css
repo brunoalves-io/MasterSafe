@@ -1,0 +1,45 @@
+/* MasterSafe 7.10.7 — remove apenas os ícones decorativos marcados na aba Configurações. */
+
+/* Esconde pseudo-ícones dos títulos indicados. */
+#view-settings .setting-card:has(#profileNameInput) > h3::before,
+#view-settings .security-card > h3::before,
+#view-settings .setting-card:has(.ai-status) > h3::before,
+#view-settings .ai-online-card > h3::before,
+#view-settings .setting-card:has(#exportBackup) > h3::before,
+#view-settings .setting-card:has(#storageInfo) > h3::before,
+#view-settings .danger-card > h3::before {
+  display: none !important;
+  content: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  flex: 0 0 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+}
+
+/* Remove ícones inseridos como elementos filhos do h3, sem tocar no texto do título. */
+#view-settings .setting-card:has(#profileNameInput) > h3 > *,
+#view-settings .security-card > h3 > *,
+#view-settings .setting-card:has(.ai-status) > h3 > *,
+#view-settings .ai-online-card > h3 > *,
+#view-settings .setting-card:has(#exportBackup) > h3 > *,
+#view-settings .setting-card:has(#storageInfo) > h3 > *,
+#view-settings .danger-card > h3 > * {
+  display: none !important;
+}
+
+/* Reposiciona os títulos para ocupar o espaço deixado pelos ícones. */
+#view-settings .setting-card:has(#profileNameInput) > h3,
+#view-settings .security-card > h3,
+#view-settings .setting-card:has(.ai-status) > h3,
+#view-settings .ai-online-card > h3,
+#view-settings .setting-card:has(#exportBackup) > h3,
+#view-settings .setting-card:has(#storageInfo) > h3,
+#view-settings .danger-card > h3 {
+  gap: 0 !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  text-indent: 0 !important;
+}
