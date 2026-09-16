@@ -1,4 +1,4 @@
-/* MasterSafe 7.10.8 — limpeza visual de ícones decorativos. */
+/* MasterSafe 7.10.9 — limpeza visual de ícones decorativos. */
 
 /* Esconde pseudo-ícones dos títulos indicados. */
 #view-settings .setting-card:has(#profileNameInput) > h3::before,
@@ -48,4 +48,20 @@
 #cloudAuthModal .modal-head::after {
   display: none !important;
   content: none !important;
+}
+
+/* Atualiza o texto de boas-vindas do onboarding sem alterar a estrutura do modal. */
+#onboardingModal .modal-head .eyebrow {
+  font-size: 0 !important;
+  text-transform: none !important;
+}
+
+#onboardingModal .modal-head .eyebrow::after {
+  content: "Bem-Vindo(a) ao MasterSafe";
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: none !important;
+  color: #1769e8;
 }
