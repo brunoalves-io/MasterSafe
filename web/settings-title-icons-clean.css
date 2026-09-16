@@ -1,4 +1,4 @@
-/* MasterSafe 7.10.7 — remove apenas os ícones decorativos marcados na aba Configurações. */
+/* MasterSafe 7.10.8 — limpeza visual de ícones decorativos. */
 
 /* Esconde pseudo-ícones dos títulos indicados. */
 #view-settings .setting-card:has(#profileNameInput) > h3::before,
@@ -42,4 +42,10 @@
   padding-left: 0 !important;
   margin-left: 0 !important;
   text-indent: 0 !important;
+}
+
+/* Remove o ícone decorativo azul com check do modal de conta na nuvem. */
+#cloudAuthModal .modal-head::after {
+  display: none !important;
+  content: none !important;
 }
