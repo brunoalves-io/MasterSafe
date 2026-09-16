@@ -1,4 +1,4 @@
-/* MasterSafe 7.10.10 — limpeza visual de ícones decorativos e marca lateral. */
+/* MasterSafe 7.10.11 — limpeza visual de ícones decorativos e marca lateral. */
 
 /* Esconde pseudo-ícones dos títulos indicados. */
 #view-settings .setting-card:has(#profileNameInput) > h3::before,
@@ -66,8 +66,9 @@
   color: #1769e8;
 }
 
-/* Marca da sidebar: usa exatamente o mesmo ícone-base do aplicativo desktop. */
+/* Marca da sidebar: mascara qualquer ícone antigo e mostra somente o ícone oficial do desktop. */
 #appShell .brand-icon {
+  position: relative !important;
   width: 56px !important;
   height: 56px !important;
   flex: 0 0 56px !important;
@@ -77,14 +78,37 @@
   margin: 0 !important;
   overflow: hidden !important;
   font-size: 0 !important;
+  line-height: 0 !important;
+  text-indent: -9999px !important;
   color: transparent !important;
-  background: url('assets/icon.svg') center center / 100% 100% no-repeat !important;
+  background: #0f172a !important;
   box-shadow: none !important;
+  isolation: isolate !important;
 }
 
-#appShell .brand-icon > *,
-#appShell .brand-icon::before,
-#appShell .brand-icon::after {
+/* Elimina o cadeado antigo criado pelo CSS-base. */
+#appShell .brand-icon::before {
   display: none !important;
   content: none !important;
+  background: none !important;
+}
+
+/* Camada final cobre completamente o conteúdo/emoji antigo com o mesmo SVG usado pelo ícone desktop. */
+#appShell .brand-icon::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 999 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: #0f172a url('assets/icon.svg') center center / 100% 100% no-repeat !important;
+  pointer-events: none !important;
+}
+
+#appShell .brand-icon > * {
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
