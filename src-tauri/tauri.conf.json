@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "MasterSafe",
-  "version": "7.10.6",
+  "version": "7.10.7",
   "identifier": "com.mastersafe.app",
   "build": {
     "frontendDist": "../web"
