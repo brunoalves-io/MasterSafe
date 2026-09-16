@@ -1,4 +1,4 @@
-const CACHE = 'mastersafe-v7-10-8-cloud-auth-icon-clean';
+const CACHE = 'mastersafe-v7-10-9-onboarding-welcome-copy';
 const FILES = [
   './','./index.html','./share.html','./styles.css','./ui-pro.css','./ui-polish.css','./concept-b.css','./concept-b-enhance.js','./mockup-exact.css','./mockup-final.css','./ui-text-fix.css','./settings-ux.css','./settings-title-icons-clean.css','./mockup-final.js','./app.js','./smart.js','./cloud-config.js','./cloud.js','./quota.js','./ai.js','./beta.js','./privacidade.html','./termos.html','./manifest.json','./assets/icon.svg'
 ];
