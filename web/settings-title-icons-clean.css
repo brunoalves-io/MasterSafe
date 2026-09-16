@@ -1,4 +1,4 @@
-/* MasterSafe 7.10.11 — limpeza visual de ícones decorativos e marca lateral. */
+/* MasterSafe 7.10.12 — limpeza visual de ícones decorativos e marca lateral. */
 
 /* Esconde pseudo-ícones dos títulos indicados. */
 #view-settings .setting-card:has(#profileNameInput) > h3::before,
@@ -111,4 +111,18 @@
 #appShell .brand-icon > * {
   visibility: hidden !important;
   opacity: 0 !important;
+}
+
+/* Subtítulo da marca lateral. */
+#appShell .brand > div:last-child > span {
+  font-size: 0 !important;
+}
+
+#appShell .brand > div:last-child > span::after {
+  content: "Seu cofre seguro" !important;
+  display: block !important;
+  margin-top: 3px !important;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  color: #a9b9d3 !important;
 }
