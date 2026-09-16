@@ -1,4 +1,4 @@
-/* MasterSafe 7.10.13 — limpeza visual de ícones decorativos e marca lateral. */
+/* MasterSafe 7.10.14 — limpeza visual de ícones decorativos e marca lateral. */
 
 /* Esconde pseudo-ícones dos títulos indicados. */
 #view-settings .setting-card:has(#profileNameInput) > h3::before,
@@ -149,4 +149,9 @@
   display: none !important;
   content: none !important;
   background: none !important;
+}
+
+/* Aba Conta: remove o badge redundante no cabeçalho (ex.: "Plano local"). */
+#view-account #accountPlanBadge {
+  display: none !important;
 }
