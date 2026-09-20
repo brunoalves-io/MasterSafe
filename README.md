@@ -1,8 +1,16 @@
+<div align="center">
+
+<img src="./src-tauri/icons/128x128@2x.png" alt="MasterSafe" width="190">
+
 # MasterSafe
+
+### Your personal documents, encrypted, organized, and always under your control.
 
 **MasterSafe is a secure personal document vault for Windows and Android, built to store, organize, encrypt, synchronize, and intelligently search important documents.**
 
 It combines local-first privacy, encrypted cloud sync, deadline tracking, OCR, recovery tools, and optional AI assistance in a single desktop and mobile experience.
+
+</div>
 
 > **Status:** Beta  
 > **Current version:** 7.7.0
