@@ -1,91 +1,290 @@
 # MasterSafe
 
-Aplicativo para Windows e Android criado para armazenar, organizar, proteger e sincronizar documentos pessoais importantes em um cofre criptografado, com busca inteligente, controle de vencimentos e recursos opcionais de IA.
+**MasterSafe is a secure personal document vault for Windows and Android, built to store, organize, encrypt, synchronize, and intelligently search important documents.**
 
-## Principais recursos
+It combines local-first privacy, encrypted cloud sync, deadline tracking, OCR, recovery tools, and optional AI assistance in a single desktop and mobile experience.
 
-- cofre pessoal com criptografia no dispositivo;
-- armazenamento local dos documentos;
-- sincronização opcional com Supabase, enviando arquivos já criptografados;
-- quota de nuvem elástica, ajustada conforme a capacidade disponível;
-- organização por categorias, tags, emissor e datas;
-- radar de vencimentos e documentos que exigem atenção;
-- leitura de PDFs com PDF.js;
-- OCR local de imagens e documentos escaneados com Tesseract.js;
-- busca inteligente pelo conteúdo dos próprios documentos;
-- **Pergunte ao Cofre** com IA híbrida e uso opcional da Groq por meio de uma Supabase Edge Function;
-- mascaramento de dados sensíveis antes do envio de trechos para a IA online;
-- autenticação de conta, suporte a 2FA, passkey e código de recuperação;
-- backup criptografado e exportação dos dados;
-- interface desktop nativa baseada em Tauri;
-- aplicativo Android gerado a partir da mesma base;
-- funcionamento do cofre local mesmo quando os serviços de nuvem ou IA estiverem indisponíveis.
+> **Status:** Beta  
+> **Current version:** 7.7.0
 
-## Arquivos principais
+---
 
-- `web/index.html` — estrutura principal da interface;
-- `web/app.js` — fluxo principal do cofre e gerenciamento dos documentos;
-- `web/smart.js` — leitura inteligente, OCR e processamento local;
-- `web/cloud.js` — autenticação e sincronização com a nuvem;
-- `web/quota.js` — controle da quota dinâmica de armazenamento;
-- `web/ai.js` — integração opcional do **Pergunte ao Cofre** com IA online;
-- `web/styles.css` — estilos base da aplicação;
-- `web/ui-pro.css` e `web/ui-polish.css` — camadas profissionais de UX/UI;
-- `src-tauri/` — aplicativo nativo para desktop e Android com Tauri;
-- `supabase/` — funções e recursos utilizados no backend Supabase;
-- `docs/ARQUITETURA.md` — visão técnica da arquitetura do MasterSafe;
-- `package.json` — scripts e dependências do projeto;
-- `.github/workflows/build-installers.yml` — automação dos builds para Windows e Android.
+## Overview
 
-## Segurança e privacidade
+MasterSafe was designed around a simple idea: personal documents should be easy to find without giving up control over them.
 
-Os documentos são protegidos no dispositivo antes da sincronização com a nuvem. A senha-mestra do cofre é diferente da senha da conta usada para autenticação.
+The application keeps a protected local vault on the device and can optionally synchronize encrypted data through the cloud. Users can organize documents, track expiration dates, extract text from scanned files, restore their vault on another device, and use the **Ask the Vault** assistant to search their own content.
 
-A IA online é opcional. Quando ativada, o MasterSafe seleciona apenas trechos relevantes dos documentos, aplica mascaramento de dados sensíveis e envia esses trechos para a função segura no backend. O arquivo original não é enviado para a API de IA.
+The local vault remains usable even when cloud or AI services are unavailable.
 
-A chave da API da Groq fica armazenada como segredo no Supabase e não é incluída no executável do Windows nem no APK Android.
+---
 
-Para mais detalhes técnicos, consulte [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md).
+## Main features
 
-## Build automático para Windows e Android
+- **Encrypted personal vault** with client-side protection
+- **Local-first storage** for documents and metadata
+- **Optional encrypted cloud synchronization**
+- **Elastic cloud quota** with capacity protection
+- **Windows desktop application**
+- **Android application**
+- Organization by **categories, tags, issuer, dates, and document type**
+- **Expiration radar** for documents that need attention
+- **PDF text extraction** with PDF.js
+- **Local OCR** for images and scanned PDFs with Tesseract.js
+- **Smart document reading** and metadata suggestions
+- **Ask the Vault** search assistant
+- Optional **Groq-powered AI** through a protected Supabase Edge Function
+- Sensitive-data masking before selected text is sent to online AI
+- **Account authentication**
+- **2FA support**
+- **Passkeys**
+- **Vault recovery code**
+- **Encrypted backup and restore**
+- Portable data export
+- Automated Windows and Android builds with GitHub Actions
 
-O repositório possui um workflow do GitHub Actions chamado **Build MasterSafe Installers**.
+---
 
-Ele é executado automaticamente quando alterações chegam à branch `main` e também pode ser iniciado manualmente em **Actions → Build MasterSafe Installers → Run workflow**.
+## Security model
 
-O processo gera dois instaladores:
+MasterSafe is designed so that documents are protected **before cloud synchronization**.
 
-- `MasterSafe-Windows-Setup.exe` — instalador para Windows;
-- `MasterSafe-Android.apk` — aplicativo instalável para Android.
+The account password and the vault master password serve different purposes:
 
-Ao final do build, os arquivos também são publicados automaticamente na pre-release **MasterSafe Beta**, usando a tag `beta-latest`.
+- the **account password** authenticates the user with the online service;
+- the **master password** protects access to the cryptographic vault.
 
-## Instalação
+Files synchronized to the cloud are uploaded in encrypted form.
+
+The optional online AI feature does **not** receive the original document file. MasterSafe selects relevant text, masks supported sensitive data patterns, and sends only the required context through a Supabase Edge Function.
+
+The Groq API key is stored as a **Supabase secret** and is never bundled inside the Windows executable or Android APK.
+
+For the technical security and architecture overview, see [docs/ARQUITETURA.md](docs/ARQUITETURA.md).
+
+---
+
+## How MasterSafe works
+
+~~~mermaid
+flowchart LR
+    A[Windows / Android] --> B[Local encrypted vault]
+    B --> C[OCR & PDF processing]
+    B --> D[Encrypted sync]
+    D --> E[Supabase]
+    B --> F[Ask the Vault]
+    F --> G[Local search]
+    F --> H[Optional online AI]
+    H --> I[Supabase Edge Function]
+    I --> J[Groq]
+~~~
+
+The local vault is the center of the application. Cloud synchronization and online AI are optional layers around it.
+
+---
+
+## Cloud and AI
+
+### Supabase
+
+MasterSafe uses Supabase for online features such as:
+
+- authentication;
+- database records;
+- encrypted file storage;
+- synchronization;
+- Edge Functions;
+- account security features.
+
+### Groq
+
+Groq is used only when the optional online AI mode is enabled.
+
+The AI feature is designed as a complement to local search, not as a dependency. If the online AI service is unavailable or reaches its usage limit, MasterSafe can continue operating with its local features.
+
+### Cloudflare
+
+Cloudflare is used for lightweight web publication and infrastructure where applicable.
+
+---
+
+## Project structure
+
+~~~text
+MasterSafe/
+├── .github/
+│   └── workflows/
+│       └── build-installers.yml
+├── docs/
+│   └── ARQUITETURA.md
+├── src-tauri/
+│   ├── src/
+│   ├── icons/
+│   ├── Cargo.toml
+│   └── tauri.conf.json
+├── supabase/
+│   └── functions/
+├── web/
+│   ├── index.html
+│   ├── app.js
+│   ├── smart.js
+│   ├── cloud.js
+│   ├── quota.js
+│   ├── ai.js
+│   ├── styles.css
+│   └── assets/
+├── package.json
+└── README.md
+~~~
+
+### Important files
+
+| File | Purpose |
+|---|---|
+| **web/index.html** | Main application interface |
+| **web/app.js** | Vault and document workflow |
+| **web/smart.js** | OCR, PDF reading, and smart processing |
+| **web/cloud.js** | Authentication and synchronization |
+| **web/quota.js** | Dynamic cloud quota logic |
+| **web/ai.js** | Optional AI integration |
+| **web/styles.css** | Main visual system |
+| **src-tauri/** | Native Windows and Android shell |
+| **supabase/** | Backend functions and Supabase resources |
+| **docs/ARQUITETURA.md** | Technical architecture documentation |
+| **.github/workflows/build-installers.yml** | Automated installers pipeline |
+
+---
+
+## Technology stack
+
+**Application**
+- Tauri 2
+- Rust
+- JavaScript
+- HTML
+- CSS
+
+**Security and local processing**
+- Web Crypto API
+- IndexedDB
+- PDF.js
+- Tesseract.js
+
+**Cloud**
+- Supabase Auth
+- Supabase Database
+- Supabase Storage
+- Supabase Edge Functions
+- Cloudflare
+
+**AI**
+- Groq API
+
+**Automation**
+- GitHub Actions
+
+---
+
+## Download
+
+Pre-built beta installers are published through GitHub Releases.
 
 ### Windows
 
-Baixe `MasterSafe-Windows-Setup.exe` na seção **Releases**, execute o instalador e abra o MasterSafe normalmente pelo Windows.
+Download **MasterSafe-Windows-Setup.exe**, run the installer, and open MasterSafe normally from Windows.
 
 ### Android
 
-Baixe `MasterSafe-Android.apk` na seção **Releases**, permita a instalação do APK no dispositivo e conclua a instalação.
+Download **MasterSafe-Android.apk** and allow APK installation from the downloaded file when Android requests permission.
 
-## Tecnologias utilizadas
+**Beta release:**  
+https://github.com/brunoalves-io/MasterSafe/releases/tag/beta-latest
 
-- Tauri 2;
-- Rust;
-- JavaScript, HTML e CSS;
-- Web Crypto API;
-- Supabase Auth, Database, Storage e Edge Functions;
-- Groq API para IA online opcional;
-- Tesseract.js para OCR;
-- PDF.js para leitura de PDFs;
-- GitHub Actions para geração automática dos instaladores.
+---
 
-## Estado do projeto
+## Build from source
 
-O MasterSafe está atualmente em fase **Beta**. A arquitetura foi projetada para priorizar privacidade, portabilidade e operação com infraestrutura de baixo custo, mantendo o cofre local disponível independentemente dos recursos online.
+### Requirements
 
-## Autor
+For desktop development:
 
-AB Alves
+- Node.js
+- Rust
+- Tauri prerequisites for your operating system
+
+Install the project dependencies:
+
+~~~bash
+npm install
+~~~
+
+Run the desktop development version:
+
+~~~bash
+npm run desktop:dev
+~~~
+
+Build the Windows application:
+
+~~~bash
+npm run desktop:build
+~~~
+
+Android builds are also supported through the Tauri Android toolchain.
+
+---
+
+## Automated builds
+
+The repository includes the **Build MasterSafe Installers** GitHub Actions workflow.
+
+Changes to the main application can trigger automated builds for:
+
+- **MasterSafe-Windows-Setup.exe**
+- **MasterSafe-Android.apk**
+
+Successful artifacts are published to the **MasterSafe Beta** release.
+
+---
+
+## Product principles
+
+MasterSafe is being developed around four principles:
+
+1. **Privacy first**  
+   Personal documents should remain under the user's control.
+
+2. **Local-first resilience**  
+   Core vault features should continue working without depending on an online service.
+
+3. **Simple security**  
+   Strong protection should not turn everyday document management into a maze.
+
+4. **Portability**  
+   Users should be able to back up, restore, export, and move their own data.
+
+---
+
+## Development status
+
+MasterSafe is currently in **Beta**.
+
+The project is under active development and interfaces, quotas, online features, packaging, and product rules may change before a stable release.
+
+Do not treat the beta as the only copy of irreplaceable documents. Keep independent backups of critical files.
+
+---
+
+## Documentation
+
+- [Architecture](docs/ARQUITETURA.md)
+- [Privacy Policy](web/privacidade.html)
+- [Terms of Use](web/termos.html)
+
+---
+
+## Author
+
+**AB Alves**
+
+MasterSafe is an independent project focused on private, practical, and accessible personal document management.
